@@ -32,6 +32,7 @@ class HomePage extends StatelessWidget {
 
   //privado solo lo usa el home
   Widget _buildTeamCard(BuildContext context, Team team) {
+    //TODO pasar a widget
     return Card(
       elevation: 4, // sombra
       child: InkWell(

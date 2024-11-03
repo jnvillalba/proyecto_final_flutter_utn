@@ -1,4 +1,3 @@
-// empty_card_widget.dart
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 
