@@ -16,11 +16,11 @@ class TeamDetailPage extends StatelessWidget {
       builder: (context) {
         List<Player> availableStickers = [
           Player.gk(
-              id: '1',
-              name: 'Sergio Romero',
-              imageUrl:
-                  'https://img.a.transfermarkt.technology/portrait/header/30690-1596803710.jpg?lm=1',
-              isCollected: true),
+            id: '1',
+            name: 'Sergio Romero',
+            imageUrl:
+                'https://img.a.transfermarkt.technology/portrait/header/30690-1596803710.jpg?lm=1',
+          ),
         ];
 
         return Container(
@@ -33,6 +33,8 @@ class TeamDetailPage extends StatelessWidget {
               const SizedBox(height: 16),
               GridView.builder(
                 shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                // Evita el scroll
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.7,
@@ -41,9 +43,17 @@ class TeamDetailPage extends StatelessWidget {
                 ),
                 itemCount: availableStickers.length,
                 itemBuilder: (context, index) {
-                  return StickerCardWidget(
-                      player: availableStickers[
-                          index]); // Usar StickerCardWidget para mostrar figuritas
+                  return Draggable<Player>(
+                      data: availableStickers[index],
+                      feedback: Material(
+                          child: StickerCardWidget(
+                              player: availableStickers[index])),
+                      childWhenDragging: Opacity(
+                          opacity: 0.5,
+                          child: StickerCardWidget(
+                              player: availableStickers[index])),
+                      child:
+                          StickerCardWidget(player: availableStickers[index]));
                 },
               ),
             ],
@@ -88,9 +98,14 @@ class TeamDetailPage extends StatelessWidget {
                 ),
                 itemCount: team.players.length,
                 itemBuilder: (context, index) {
-                  return StickerWidget(
-                      player: team.players[
-                          index]); // Usar StickerWidget para mostrar jugadores
+                  return DragTarget<Player>(
+                    onAccept: (player) {
+                      // TODO Handle the accepted player here
+                    },
+                    builder: (context, candidateData, rejectedData) {
+                      return StickerWidget(player: team.players[index]);
+                    },
+                  );
                 },
               ),
             ),
