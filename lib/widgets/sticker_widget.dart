@@ -10,8 +10,6 @@ class StickerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 150,
-      height: 200,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey, width: 2),
         borderRadius: BorderRadius.circular(8),

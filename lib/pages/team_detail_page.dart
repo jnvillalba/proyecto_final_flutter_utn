@@ -34,17 +34,17 @@ class TeamDetailPage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Expanded(
-              child: Center(
-                // Añadido Center aquí
-                child: Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  children: team.players.map((player) {
-                    return StickerWidget(
-                      player: player,
-                    );
-                  }).toList(),
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.7,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20,
                 ),
+                itemCount: team.players.length,
+                itemBuilder: (context, index) {
+                  return StickerWidget(player: team.players[index]);
+                },
               ),
             ),
           ],
