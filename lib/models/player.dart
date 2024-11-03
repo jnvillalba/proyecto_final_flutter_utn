@@ -14,4 +14,12 @@ class Player {
     required this.imageUrl,
     this.isCollected = false,
   });
+
+  Player.gk({
+    required this.id,
+    required this.name,
+    required this.imageUrl,
+    this.isCollected = false,
+    this.position = PlayerPosition.goalkeeper,
+  });
 }
