@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
         onTap: () => _onTeamTap(context, team),
         child: Container(
           width: 100,
-          height: 500,
+          height: 100,
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
