@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_final_facil/data.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 import 'package:proyecto_final_facil/widgets/sticker_mazo.dart';
 
@@ -15,12 +16,10 @@ class TeamDetailPage extends StatelessWidget {
       context: context,
       builder: (context) {
         List<Player> availableStickers = [
-          Player.gk(
-            id: '1',
-            name: 'Sergio Romero',
-            imageUrl:
-                'https://img.a.transfermarkt.technology/portrait/header/30690-1596803710.jpg?lm=1',
-          ),
+          romero(),
+          romero(),
+          romero(),
+          romero(),
         ];
 
         return Container(
@@ -28,35 +27,44 @@ class TeamDetailPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Figuritas disponibles:',
-                  style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                'Figuritas disponibles:',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               const SizedBox(height: 16),
-              GridView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                // Evita el scroll
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.7,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
+              SizedBox(
+                height: 160,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: availableStickers.map((player) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Draggable<Player>(
+                          data: player,
+                          feedback: SizedBox(
+                            height: 160,
+                            width: 100,
+                            child: StickerCardWidget(player: player),
+                          ),
+                          childWhenDragging: Opacity(
+                            opacity: 0.5,
+                            child: SizedBox(
+                              height: 160,
+                              width: 100,
+                              child: StickerCardWidget(player: player),
+                            ),
+                          ),
+                          child: SizedBox(
+                            height: 160,
+                            width: 100,
+                            child: StickerCardWidget(player: player),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
                 ),
-                itemCount: availableStickers.length,
-                itemBuilder: (context, index) {
-                  return Draggable<Player>(
-                      data: availableStickers[index],
-                      feedback: SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: StickerCardWidget(
-                              player: availableStickers[index])),
-                      childWhenDragging: Opacity(
-                          opacity: 0.5,
-                          child: StickerCardWidget(
-                              player: availableStickers[index])),
-                      child:
-                          StickerCardWidget(player: availableStickers[index]));
-                },
               ),
             ],
           ),

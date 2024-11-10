@@ -13,6 +13,15 @@ List<Team> getTeams() {
   ];
 }
 
+Player romero() {
+  return Player.gk(
+    id: '1',
+    name: 'Sergio Romero',
+    imageUrl:
+        'https://img.a.transfermarkt.technology/portrait/header/30690-1596803710.jpg?lm=1',
+  );
+}
+
 Team getBoca() {
   return Team(
     id: '1',
@@ -20,12 +29,7 @@ Team getBoca() {
     badge:
         'https://tmssl.akamaized.net//images/wappen/head/189.png?lm=1511621129',
     players: [
-      Player.gk(
-        id: '1',
-        name: 'Sergio Romero',
-        imageUrl:
-            'https://img.a.transfermarkt.technology/portrait/header/30690-1596803710.jpg?lm=1',
-      ),
+      romero(),
       Player(
         id: '2',
         name: 'Marcos Rojo',
