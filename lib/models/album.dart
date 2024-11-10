@@ -5,7 +5,6 @@ class Album {
 
   Album({required this.teams});
 
-  // Método para contar el progreso de la colección
   int get totalPlayers =>
       teams.fold(0, (sum, team) => sum + team.players.length);
 

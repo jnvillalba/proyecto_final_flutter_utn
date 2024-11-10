@@ -28,3 +28,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+//TODO: ideas
+// persistencia
+// - abrir sobres
+// - cambio de pagina dentro de un equipo
