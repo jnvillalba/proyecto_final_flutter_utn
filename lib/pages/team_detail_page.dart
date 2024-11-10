@@ -45,7 +45,9 @@ class TeamDetailPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Draggable<Player>(
                       data: availableStickers[index],
-                      feedback: Material(
+                      feedback: SizedBox(
+                          height: 100,
+                          width: 100,
                           child: StickerCardWidget(
                               player: availableStickers[index])),
                       childWhenDragging: Opacity(
