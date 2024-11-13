@@ -15,7 +15,6 @@ class HomePage extends StatelessWidget {
         title: const Text('ÁlbUTN'),
       ),
       body: GridView.builder(
-        //TODO SliverGridDelegateWithFixedCrossAxisCount
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           crossAxisSpacing: 16,

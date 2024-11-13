@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_final_facil/components//sticker_mazo.dart';
 import 'package:proyecto_final_facil/data.dart';
 import 'package:proyecto_final_facil/models/player.dart';
-import 'package:proyecto_final_facil/widgets/sticker_mazo.dart';
 
+import '../components/sticker_widget.dart';
 import '../models/team.dart';
-import '../widgets/sticker_widget.dart';
 
 class TeamDetailPage extends StatefulWidget {
   final Team team;

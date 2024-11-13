@@ -9,7 +9,8 @@ List<Team> getTeams() {
     getRacing(),
     getCAI(),
     getEstudiantes(),
-    getGC()
+    getGC(),
+    getRiestra(),
   ];
 }
 
@@ -43,6 +44,24 @@ Team getBoca() {
         position: PlayerPosition.forward,
         imageUrl:
             'https://img.a.transfermarkt.technology/portrait/header/48280-1619791055.jpg?lm=1',
+      ),
+    ],
+  );
+}
+
+Team getRiestra() {
+  return Team(
+    id: '8',
+    name: 'Riestra',
+    badge:
+        'https://tmssl.akamaized.net//images/wappen/head/189.png?lm=1511621129',
+    players: [
+      Player(
+        id: '47 ',
+        name: 'Iván "Spreen" Buhajeruk',
+        position: PlayerPosition.forward,
+        imageUrl:
+            'https://img.a.transfermarkt.technology/portrait/header/1341853-1731349912.JPG?lm=1',
       ),
     ],
   );

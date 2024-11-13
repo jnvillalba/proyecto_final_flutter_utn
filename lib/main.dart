@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_final_facil/data.dart';
-import 'package:proyecto_final_facil/pages/home_page.dart';
+import 'package:proyecto_final_facil/pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -24,12 +23,12 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: HomePage(teams: getTeams()),
+      home: LoginPage(),
     );
   }
 }
 
 //TODO: ideas
 // persistencia
-// - abrir sobres
+// - abrir sobres - aca puedo aplicar animacion y una pagina solo para eso
 // - cambio de pagina dentro de un equipo
