@@ -17,7 +17,7 @@ class CustomTextfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: 50,
+        horizontal: 25,
         vertical: 10,
       ),
       child: TextField(

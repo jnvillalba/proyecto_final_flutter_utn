@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_final_facil/pages/login_page.dart';
+import 'package:proyecto_final_facil/pages/auth_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: LoginPage(),
+      home: AuthPage(),
     );
   }
 }
@@ -32,3 +32,4 @@ class MyApp extends StatelessWidget {
 // persistencia
 // - abrir sobres - aca puedo aplicar animacion y una pagina solo para eso
 // - cambio de pagina dentro de un equipo
+// - ver perfil de jugador
