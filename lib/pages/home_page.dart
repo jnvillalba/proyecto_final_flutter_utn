@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/models/team.dart';
 import 'package:proyecto_final_facil/pages/team_detail_page.dart';
 
-class HomePage extends StatelessWidget {
-  //Stateless, no cambia
-  final List<Team> teams;
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
-  const HomePage({super.key, required this.teams});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late final List<Team> teams;
 
   @override
   Widget build(BuildContext context) {

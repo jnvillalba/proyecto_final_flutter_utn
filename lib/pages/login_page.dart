@@ -1,4 +1,3 @@
-//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/custom_btn.dart';
 import 'package:proyecto_final_facil/components/custom_textfield.dart';
@@ -7,42 +6,46 @@ void main() {
   runApp(LoginPage());
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _LoginPageState();
+}
+class _LoginPageState extends State<LoginPage> {
   final userNameController = TextEditingController();
   final passwordController = TextEditingController();
 
-  LoginPage({super.key});
-
   void _signIn() async {
-    print('User: ${userNameController.text}');
-    print('Password: ${passwordController.text}');
-    // BuildContext dialogContext = context;
-    // showDialog(
-    //     context: context,
-    //     barrierDismissible: false,
-    //     builder: (BuildContext context) {
-    //       return AlertDialog(
-    //         title: const Text('Logging in...'),
-    //         content: const LinearProgressIndicator(),
-    //       );
-    //     });
-    // try {
-    //   await FirebaseAuth.instance.signInWithEmailAndPassword(
-    //     email: userNameController.text,
-    //     password: passwordController.text,
-    //   );
-    //   ifMounted(dialogContext, mounted)
-    //
-    // } on FirebaseAuthException catch (e) {
-    //   ifMounted(dialogContext, mounted)
-    //   print('Error initializing Firebase: $e');
-    //   Navigator.of(dialogContext).pop();
-    // } catch (e) {
-    //   ifMounted(dialogContext, mounted)
-    //   print('Error catch (: $e');
-    //   Navigator.of(dialogContext).pop();
-    // }
+  print('User: ${userNameController.text}');
+  print('Password: ${passwordController.text}');
+  BuildContext dialogContext = context;
+  showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return const AlertDialog(
+          title: Text('Logging in...'),
+          content: LinearProgressIndicator(),
+        );
+      });
+  try {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: userNameController.text,
+      password: passwordController.text,
+    );
+    ifMounted(dialogContext, mounted)
+
+  } on FirebaseAuthException catch (e) {
+    ifMounted(dialogContext, mounted)
+    print('Error initializing Firebase: $e');
+    Navigator.of(dialogContext).pop();
+  } catch (e) {
+    ifMounted(dialogContext, mounted)
+    print('Error catch (: $e');
+    Navigator.of(dialogContext).pop();
   }
+}
 
   // void ifMounted((dialogContext, mounted) {
   // if (mounted) {
