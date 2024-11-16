@@ -5,6 +5,7 @@ class Player {
   final String name;
   final PlayerPosition position;
   final String imageUrl;
+  final int number;
   bool isCollected; // Estado de la figurita (si la tengo o no)
 
   Player({
@@ -12,6 +13,7 @@ class Player {
     required this.name,
     required this.position,
     required this.imageUrl,
+    required this.number,
     this.isCollected = false,
   });
 
@@ -20,6 +22,7 @@ class Player {
     required this.name,
     required this.imageUrl,
     this.isCollected = false,
+    required this.number,
     this.position = PlayerPosition.goalkeeper,
   });
 }

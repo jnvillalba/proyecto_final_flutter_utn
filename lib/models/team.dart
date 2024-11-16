@@ -5,11 +5,13 @@ class Team {
   final String name;
   final String badge;
   final List<Player> players;
+  final int size;
 
   Team({
     required this.id,
     required this.name,
     required this.badge,
     required this.players,
+    this.size = 30,
   });
 }

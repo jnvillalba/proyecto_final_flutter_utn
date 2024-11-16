@@ -17,6 +17,7 @@ List<Team> getTeams() {
 Player romero() {
   return Player.gk(
     id: '1',
+    number: 1,
     name: 'Sergio Romero',
     imageUrl:
         'https://img.a.transfermarkt.technology/portrait/header/30690-1596803710.jpg?lm=1',
@@ -33,6 +34,7 @@ Team getBoca() {
       romero(),
       Player(
         id: '2',
+        number: 6,
         name: 'Marcos Rojo',
         position: PlayerPosition.forward,
         imageUrl:
@@ -40,6 +42,7 @@ Team getBoca() {
       ),
       Player(
         id: '3',
+        number: 10,
         name: 'Edinson Cavani',
         position: PlayerPosition.forward,
         imageUrl:
@@ -57,7 +60,8 @@ Team getRiestra() {
         'https://tmssl.akamaized.net//images/wappen/head/189.png?lm=1511621129',
     players: [
       Player(
-        id: '47 ',
+        id: '47',
+        number: 47,
         name: 'Iván "Spreen" Buhajeruk',
         position: PlayerPosition.forward,
         imageUrl:
@@ -83,14 +87,7 @@ Team getRiver() {
     name: 'River',
     badge:
         'https://tmssl.akamaized.net//images/wappen/head/209.png?lm=1645539487',
-    players: [
-      Player(
-        id: '3',
-        name: 'Player 3',
-        position: PlayerPosition.defender,
-        imageUrl: 'https://example.com/player3.png',
-      ),
-    ],
+    players: [],
   );
 }
 
@@ -100,14 +97,7 @@ Team getCAI() {
     name: 'Independiente',
     badge:
         'https://tmssl.akamaized.net//images/wappen/head/1234.png?lm=1489920510',
-    players: [
-      Player(
-        id: '3',
-        name: 'Player 3',
-        position: PlayerPosition.defender,
-        imageUrl: 'https://example.com/player3.png',
-      ),
-    ],
+    players: [],
   );
 }
 
@@ -117,14 +107,7 @@ Team getGC() {
     name: 'Godoy Cruz',
     badge:
         'https://tmssl.akamaized.net//images/wappen/head/12574.png?lm=1412763466',
-    players: [
-      Player(
-        id: '3',
-        name: 'Player 3',
-        position: PlayerPosition.defender,
-        imageUrl: 'https://example.com/player3.png',
-      ),
-    ],
+    players: [],
   );
 }
 
@@ -134,13 +117,6 @@ Team getEstudiantes() {
     name: 'Estudiantes',
     badge:
         'https://tmssl.akamaized.net//images/wappen/head/288.png?lm=1615331978',
-    players: [
-      Player(
-        id: '3',
-        name: 'Player 3',
-        position: PlayerPosition.defender,
-        imageUrl: 'https://example.com/player3.png',
-      ),
-    ],
+    players: [],
   );
 }
