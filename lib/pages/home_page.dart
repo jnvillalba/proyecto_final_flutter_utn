@@ -3,7 +3,7 @@ import 'package:proyecto_final_facil/models/team.dart';
 import 'package:proyecto_final_facil/pages/team_detail_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, required List teams});
 
   @override
   State<HomePage> createState() => _HomePageState();

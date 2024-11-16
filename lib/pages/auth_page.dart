@@ -5,12 +5,12 @@ import 'package:proyecto_final_facil/pages/login_page.dart';
 import 'home_page.dart';
 
 class AuthPage extends StatelessWidget {
-  final _auth = FirebaseAuth.instance;
+  const AuthPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<User?>(
-      stream: _auth.authStateChanges(),
+      stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -21,7 +21,7 @@ class AuthPage extends StatelessWidget {
             teams: [],
           );
         } else {
-          return LoginPage();
+          return const LoginPage();
         }
       },
     );
