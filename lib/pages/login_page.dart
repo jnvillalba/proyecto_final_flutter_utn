@@ -2,6 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/custom_btn.dart';
 import 'package:proyecto_final_facil/components/custom_textfield.dart';
+import 'package:proyecto_final_facil/components/square_btn.dart';
+import 'package:proyecto_final_facil/services/auth_service.dart';
+
+import '../components/login/text_divider.dart';
 
 void main() {
   runApp(const LoginPage());
@@ -24,10 +28,7 @@ class _LoginPageState extends State<LoginPage> {
 
     _showLoadingDialog();
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
+      AuthService().signInWithMail(email, password);
       _navigateToHome();
     } on FirebaseAuthException catch (e) {
       _handleAuthException(e);
@@ -56,15 +57,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleAuthException(FirebaseAuthException e) {
-    final Map<String, String> errorMessages = {
-      'invalid-email': 'El formato del correo electrónico es inválido.',
-      'user-not-found': 'No se encontró una cuenta con este correo.',
-      'wrong-password': 'La contraseña es incorrecta.',
-      'too-many-requests':
-          'Demasiados intentos fallidos. Intenta nuevamente más tarde.',
-    };
-
-    final String message = errorMessages[e.code] ?? 'Error desconocido.';
+    final String message = AuthService().getErrorMessageMail(e);
     _showErrorDialog(message);
   }
 
@@ -82,6 +75,18 @@ class _LoginPageState extends State<LoginPage> {
         ],
       ),
     );
+  }
+
+  void _signInGoogle() async {
+    _showLoadingDialog();
+    try {
+      AuthService().signInWithGoogle();
+      _navigateToHome();
+    } catch (e) {
+      _showErrorDialog('Ocurrió un error.');
+    } finally {
+      _dismissLoadingDialog();
+    }
   }
 
   void _navigateToHome() {
@@ -112,6 +117,46 @@ class _LoginPageState extends State<LoginPage> {
                 controller: passwordController,
               ),
               CustomBtn(text: 'Login', onTap: _signIn),
+              const Padding(
+                padding: EdgeInsets.all(5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Forgot your login details? ',
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                    Text(
+                      'Get help logging in.',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const TextDivider(
+                text: 'OR',
+                dividerColor: Colors.white,
+                textColor: Colors.white,
+                thickness: 1.0,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SquareBtn(
+                    onTap: () => _signInGoogle(),
+                    imagePath: 'lib/icons/google.png',
+                    height: 50,
+                  ),
+                ],
+              ),
             ],
           ),
         ),

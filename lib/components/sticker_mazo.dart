@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../models/player.dart';
+import 'package:proyecto_final_facil/models/player.dart';
 
 class StickerCardWidget extends StatelessWidget {
   final Player player;
