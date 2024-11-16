@@ -19,41 +19,74 @@ class _LoginPageState extends State<LoginPage> {
   final passwordController = TextEditingController();
 
   void _signIn() async {
-    print('User: ${userNameController.text}');
-    print('Password: ${passwordController.text}');
-    BuildContext dialogContext = context;
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return const AlertDialog(
-            title: Text('Logging in...'),
-            content: LinearProgressIndicator(),
-          );
-        });
+    final String email = userNameController.text;
+    final String password = passwordController.text;
+
+    _showLoadingDialog();
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: userNameController.text,
-        password: passwordController.text,
+        email: email,
+        password: password,
       );
-      ifMounted(dialogContext, mounted);
+      _navigateToHome();
     } on FirebaseAuthException catch (e) {
-      ifMounted(dialogContext, mounted);
-      print('Error initializing Firebase: $e');
-      Navigator.of(dialogContext).pop();
+      _handleAuthException(e);
     } catch (e) {
-      ifMounted(dialogContext, mounted);
-      print('Error catch (: $e');
-      Navigator.of(dialogContext).pop();
+      _showErrorDialog('Ocurrió un error.');
+    } finally {
+      _dismissLoadingDialog();
     }
   }
 
-  void ifMounted(dialogContext, mounted) {
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const AlertDialog(
+        title: Text('Logging in...'),
+        content: LinearProgressIndicator(),
+      ),
+    );
+  }
+
+  void _dismissLoadingDialog() {
     if (mounted) {
-      Navigator.of(dialogContext).pop();
+      Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+  void _handleAuthException(FirebaseAuthException e) {
+    final Map<String, String> errorMessages = {
+      'invalid-email': 'El formato del correo electrónico es inválido.',
+      'user-not-found': 'No se encontró una cuenta con este correo.',
+      'wrong-password': 'La contraseña es incorrecta.',
+      'too-many-requests':
+          'Demasiados intentos fallidos. Intenta nuevamente más tarde.',
+    };
+
+    final String message = errorMessages[e.code] ?? 'Error desconocido.';
+    _showErrorDialog(message);
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _navigateToHome() {
+    if (mounted) {
       Navigator.of(context).pushReplacementNamed('/home');
-    } else {
-      print('Error initializing Firebase: not mounted $mounted');
     }
   }
 
