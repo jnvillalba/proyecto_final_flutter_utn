@@ -4,6 +4,7 @@ import 'package:proyecto_final_facil/components/custom_btn.dart';
 import 'package:proyecto_final_facil/components/custom_textfield.dart';
 import 'package:proyecto_final_facil/components/square_btn.dart';
 import 'package:proyecto_final_facil/services/auth_service.dart';
+import 'package:proyecto_final_facil/services/player_service.dart';
 
 import '../components/login/text_divider.dart';
 
@@ -151,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SquareBtn(
-                    onTap: () => _signInGoogle(),
+                    onTap: () => createTeama(),
                     imagePath: 'lib/icons/google.png',
                     height: 50,
                   ),
@@ -162,5 +163,10 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  Future<void> createTeama() async {
+    await createAll();
+    print('Team created');
   }
 }

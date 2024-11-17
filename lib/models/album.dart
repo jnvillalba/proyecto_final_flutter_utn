@@ -6,14 +6,5 @@ class Album {
   Album({required this.teams});
 
   int get totalPlayers =>
-      teams.fold(0, (sum, team) => sum + team.players.length);
-
-  int get collectedPlayers => teams.fold(
-        0,
-        (sum, team) =>
-            sum + team.players.where((player) => player.isCollected).length,
-      );
-
-  double get collectionProgress =>
-      totalPlayers > 0 ? (collectedPlayers / totalPlayers) * 100 : 0;
+      teams.fold(0, (sum, team) => sum + team.playerRefs.length);
 }

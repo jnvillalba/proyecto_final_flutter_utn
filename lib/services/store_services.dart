@@ -4,41 +4,88 @@ import 'package:proyecto_final_facil/models/team.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
-Future<List> getPlayers() async {
-  List players = [];
-  CollectionReference playersRef = db.collection('players');
-  QuerySnapshot querySnapshot = await playersRef.get();
-
-  for (var doc in querySnapshot.docs) {
-    final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    final player = Player(
-      id: doc.id,
-      number: data['number'],
-      name: data['name'],
-      position: data['position'],
-      imageUrl: '',
-    );
-
-    players.add(player);
+Future<void> createTeam(Team team) async {
+  try {
+    CollectionReference teamsRef = db.collection('teams');
+    await teamsRef.add(team.toJson());
+  } catch (e) {
+    print(e);
   }
-  return players;
 }
 
-Future<List> getTeams() async {
-  List teams = [];
-  CollectionReference teamsRef = db.collection('teams');
-  QuerySnapshot querySnapshot = await teamsRef.get();
+Future<DocumentReference> createPlayer(Player player) async {
+  try {
+    CollectionReference playersRef = db.collection('players');
 
-  for (var doc in querySnapshot.docs) {
-    final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    final team = Team(
-        id: doc.id,
-        name: data['name'],
-        badge: data['badge'],
-        players: [],
-        size: data['size']);
+    DocumentReference playerRef = await playersRef.add({
+      'name': player.name,
+      'position': player.position.toString(),
+      'imageUrl': player.imageUrl,
+      'number': player.number,
+      'isCollected': player.isCollected,
+      'teamRef': player.teamRef,
+    });
 
-    teams.add(team);
+    return playerRef;
+  } catch (e) {
+    print('Error al crear el jugador: $e');
+    rethrow;
   }
-  return teams;
+}
+
+Future<void> createTeamWithPlayers(Team team, List<Player> players) async {
+  try {
+    List<DocumentReference> playerRefs = [];
+    for (var player in players) {
+      DocumentReference playerRef = await createPlayer(player);
+      playerRefs.add(playerRef);
+    }
+    CollectionReference teamsRef = db.collection('teams');
+
+    await teamsRef.add({
+      'name': team.name,
+      'badge': team.badge,
+      'playerRefs': playerRefs,
+      'size': team.size,
+    });
+
+    print('Equipo creado con éxito, jugadores referenciados');
+  } catch (e) {
+    print('Error al crear el equipo: $e');
+    rethrow;
+  }
+}
+
+Future<List<Player>> getPlayersFromTeam(Team team) async {
+  try {
+    List<Player> players = [];
+    for (var playerRef in team.playerRefs) {
+      DocumentSnapshot playerSnapshot = await playerRef.get();
+      if (playerSnapshot.exists) {
+        players.add(
+            Player.fromJson(playerSnapshot.data() as Map<String, dynamic>));
+      }
+    }
+    return players;
+  } catch (e) {
+    print('Error al obtener jugadores del equipo: $e');
+    rethrow;
+  }
+}
+
+Future<List<Team>> getAllTeams() async {
+  try {
+    CollectionReference teamsRef = db.collection('teams');
+    QuerySnapshot snapshot = await teamsRef.get();
+
+    List<Team> teams = snapshot.docs.map((doc) {
+      return Team.fromJson(doc.data() as Map<String, dynamic>)
+          .copyWithId(doc.id);
+    }).toList();
+
+    return teams;
+  } catch (e) {
+    print('Error al obtener los equipos: $e');
+    rethrow;
+  }
 }

@@ -29,7 +29,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const AuthPage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const AuthPage(),
+      },
     );
   }
 }
@@ -39,3 +42,7 @@ class MyApp extends StatelessWidget {
 // - abrir sobres - aca puedo aplicar animacion y una pagina solo para eso
 // - cambio de pagina dentro de un equipo
 // - ver perfil de jugador
+// badge con secciones
+// sign out (FirebaseAuth.instance.signOut())
+// descartar repetidas (delete crud)
+// Update para actualizaar pegadas
