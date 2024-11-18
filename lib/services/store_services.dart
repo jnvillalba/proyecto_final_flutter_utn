@@ -20,6 +20,9 @@ Future<Player> getPlayer(String playerId) async {
 }
 
 Future<Team> getTeam(String teamId) async {
+  if (teamId.isEmpty) {
+    throw Exception('Team ID is required');
+  }
   final doc = await db.collection('teams').doc(teamId).get();
   final team = Team.fromJson(doc.data()!);
   team.id = doc.id;
@@ -35,6 +38,9 @@ Future<Team> _populateTeamWithPlayers(Team team) async {
 }
 
 Future<Team> getTeamWithPlayers(String teamId) async {
+  if (teamId.isEmpty) {
+    throw Exception('Team ID is required');
+  }
   final team = await getTeam(teamId);
   return await _populateTeamWithPlayers(team);
 }
@@ -46,6 +52,7 @@ Future<List<Team>> getAllTeamsWithPlayers() async {
     return await Future.wait(
       teamQuery.docs.map((teamDoc) async {
         final team = Team.fromJson(teamDoc.data());
+        team.id = teamDoc.id;
         return await _populateTeamWithPlayers(team);
       }).toList(),
     );

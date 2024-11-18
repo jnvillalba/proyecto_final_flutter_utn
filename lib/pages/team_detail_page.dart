@@ -3,8 +3,10 @@ import 'package:proyecto_final_facil/components/sticker_collected.dart';
 import 'package:proyecto_final_facil/components/sticker_mazo.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 import 'package:proyecto_final_facil/models/team.dart';
+import 'package:proyecto_final_facil/services/player_service.dart';
 
 class TeamDetailPage extends StatefulWidget {
+  //TODO router
   final Team team;
 
   const TeamDetailPage({super.key, required this.team});
@@ -14,6 +16,16 @@ class TeamDetailPage extends StatefulWidget {
 }
 
 class TeamDetailPageState extends State<TeamDetailPage> {
+  //TODO ver de pasar a router con id
+  late final Team team;
+
+  @override
+  void initState() {
+    super.initState();
+    team = widget.team;
+  }
+
+  late List<Player> players = [];
   Offset _dragPosition = const Offset(0, 0);
   bool _isDragging = false;
   Player? _draggedPlayer;
@@ -22,6 +34,11 @@ class TeamDetailPageState extends State<TeamDetailPage> {
   List<Player> availableStickers = [
     //romero(),
   ];
+
+  List<Player> sortPlayersByPosition(List<Player> players) {
+    players.sort((a, b) => a.position.index.compareTo(b.position.index));
+    return players;
+  }
 
   void _showStickers(BuildContext context) {
     showModalBottomSheet(
@@ -133,97 +150,20 @@ class TeamDetailPageState extends State<TeamDetailPage> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Jugadores:',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.7,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 20,
-                    ),
-                    itemCount: widget.team.players?.length,
-                    itemBuilder: (context, index) {
-                      final teamPlayer = widget.team.players?[index];
-                      return DragTarget<Player>(
-                        onWillAccept: (draggedPlayer) {
-                          if (teamPlayer!.isCollected) {
-                            //TODO: mejora que aparezca al soltar
-                            _showMessage('Ya pegaste este juador', false);
-                            return false;
-                          }
-                          if (draggedPlayer?.id != teamPlayer.id) {
-                            _showMessage('Jugador incorrecto', false);
-                            return false;
-                          }
-
-                          return true;
-                        },
-                        onAccept: (draggedPlayer) {
-                          _updatePlayerCollection(draggedPlayer, teamPlayer!);
-                        },
-                        builder: (context, candidateData, rejectedData) {
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: candidateData.isNotEmpty
-                                    ? Colors.green
-                                    : Colors.transparent,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: teamPlayer!.isCollected
-                                ? StickerCardWidget(player: teamPlayer)
-                                : StickerCollected(player: teamPlayer),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-            if (_isDragging && _draggedPlayer != null)
-              Positioned(
-                left: _dragPosition.dx - 50,
-                top: _dragPosition.dy - 80,
-                child: Draggable<Player>(
-                  data: _draggedPlayer,
-                  feedback: SizedBox(
-                    height: 160,
-                    width: 100,
-                    child: StickerCardWidget(player: _draggedPlayer!),
-                  ),
-                  childWhenDragging: Container(),
-                  child: SizedBox(
-                    height: 160,
-                    width: 100,
-                    child: StickerCardWidget(player: _draggedPlayer!),
-                  ),
-                  onDragEnd: (details) {
-                    setState(() {
-                      _dragPosition = details.offset;
-                    });
-                  },
-                ),
-              ),
-          ],
-        ),
-      ),
+      body: FutureBuilder(
+          future: getPlayersByTeamId(team.id!),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            }
+            players = snapshot.data as List<Player>;
+            return _buildPlayers(context);
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showStickers(context),
         child: const Icon(Icons.list),
@@ -239,5 +179,99 @@ class TeamDetailPageState extends State<TeamDetailPage> {
       _draggedPlayer = null;
       _showMessage('${teamPlayer.name} agregado a la colección', true);
     });
+  }
+
+  Widget _buildPlayers(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Jugadores:',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.7,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
+                  ),
+                  itemCount: widget.team.players?.length,
+                  itemBuilder: (context, index) {
+                    final teamPlayer =
+                        sortPlayersByPosition(widget.team.players!)[index];
+                    return DragTarget<Player>(
+                      onWillAccept: (draggedPlayer) {
+                        if (teamPlayer.isCollected) {
+                          //TODO: mejora que aparezca al soltar
+                          _showMessage('Ya pegaste este juador', false);
+                          return false;
+                        }
+                        if (draggedPlayer?.id != teamPlayer.id) {
+                          _showMessage('Jugador incorrecto', false);
+                          return false;
+                        }
+
+                        return true;
+                      },
+                      onAccept: (draggedPlayer) {
+                        _updatePlayerCollection(draggedPlayer, teamPlayer);
+                      },
+                      builder: (context, candidateData, rejectedData) {
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: candidateData.isNotEmpty
+                                  ? Colors.green
+                                  : Colors.transparent,
+                              width: 2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: teamPlayer.isCollected
+                              ? StickerCardWidget(player: teamPlayer)
+                              : StickerCollected(player: teamPlayer),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+          if (_isDragging && _draggedPlayer != null)
+            Positioned(
+              left: _dragPosition.dx - 50,
+              top: _dragPosition.dy - 80,
+              child: Draggable<Player>(
+                data: _draggedPlayer,
+                feedback: SizedBox(
+                  height: 160,
+                  width: 100,
+                  child: StickerCardWidget(player: _draggedPlayer!),
+                ),
+                childWhenDragging: Container(),
+                child: SizedBox(
+                  height: 160,
+                  width: 100,
+                  child: StickerCardWidget(player: _draggedPlayer!),
+                ),
+                onDragEnd: (details) {
+                  setState(() {
+                    _dragPosition = details.offset;
+                  });
+                },
+              ),
+            ),
+        ],
+      ),
+    );
   }
 }

@@ -1,5 +1,5 @@
 enum PlayerPosition {
-  goalkeeper(),
+  goalkeeper,
   defender,
   midfielder,
   forward,

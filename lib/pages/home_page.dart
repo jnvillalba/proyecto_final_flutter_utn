@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/team_card.dart';
 import 'package:proyecto_final_facil/models/team.dart';
+import 'package:proyecto_final_facil/services/auth_service.dart';
 import 'package:proyecto_final_facil/services/store_services.dart';
 
 class HomePage extends StatefulWidget {
@@ -18,6 +19,12 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ÁlbUTN'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.exit_to_app),
+            onPressed: () => AuthService().logout(context),
+          ),
+        ],
       ),
       body: FutureBuilder(
           future: getAllTeamsWithPlayers(),

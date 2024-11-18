@@ -1,27 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/models/team.dart';
-import 'package:proyecto_final_facil/pages/team_detail_page.dart';
 
 class TeamCard extends StatelessWidget {
   final Team team;
 
   const TeamCard({super.key, required this.team});
 
-  //TODO cambiar router 2.41
   void _onTeamTap(BuildContext context, Team team) {
-    Navigator.push(
+    Navigator.pushNamed(
       context,
-      MaterialPageRoute(
-        builder: (context) => TeamDetailPage(team: team),
-      ),
-    );
-  }
-
-  void _onTeamTap2(BuildContext context, snapshot) async {
-    await Navigator.pushNamed(
-      context,
-      '/team/',
-      arguments: snapshot.data?['uid'],
+      '/team/${team.id}',
     );
   }
 

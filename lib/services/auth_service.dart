@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -33,5 +34,17 @@ class AuthService {
 
     final String message = errorMessages[e.code] ?? 'Error desconocido.';
     return message;
+  }
+
+  void logout(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacementNamed(context, '/');
+    } catch (e) {
+      print("Error durante el logout: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error al cerrar sesión')),
+      );
+    }
   }
 }
