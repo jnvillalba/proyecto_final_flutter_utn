@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage> {
         title: const Text('ÁlbUTN'),
       ),
       body: FutureBuilder(
-          future: getAllTeams(),
+          future: getAllTeamsWithPlayers(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

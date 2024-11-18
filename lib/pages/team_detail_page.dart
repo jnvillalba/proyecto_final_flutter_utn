@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/sticker_mazo.dart';
+import 'package:proyecto_final_facil/components/sticker_widget.dart';
 import 'package:proyecto_final_facil/models/player.dart';
-
-import '../components/sticker_widget.dart';
-import '../models/team.dart';
+import 'package:proyecto_final_facil/models/team.dart';
 
 class TeamDetailPage extends StatefulWidget {
   final Team team;
@@ -19,8 +18,10 @@ class TeamDetailPageState extends State<TeamDetailPage> {
   bool _isDragging = false;
   Player? _draggedPlayer;
 
-  // TODO: Implementar servicio
-  List<Player> availableStickers = [];
+  // TODO: Implementar con persistencia al iniciar
+  List<Player> availableStickers = [
+    //romero(),
+  ];
 
   void _showStickers(BuildContext context) {
     showModalBottomSheet(
@@ -118,7 +119,6 @@ class TeamDetailPageState extends State<TeamDetailPage> {
   }
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -154,54 +154,42 @@ class TeamDetailPageState extends State<TeamDetailPage> {
                       mainAxisSpacing: 20,
                       crossAxisSpacing: 20,
                     ),
-                    itemCount: widget.team.playerRefs.length,
+                    itemCount: widget.team.players?.length,
                     itemBuilder: (context, index) {
-                      final teamPlayer = widget.team.playerRefs[index];
-                      return FutureBuilder<bool>(
-                        future: _isPlayerCollected(teamPlayer as Player),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          } else if (snapshot.hasError) {
-                            return Center(
-                                child: Text('Error: ${snapshot.error}'));
-                          } else if (!snapshot.hasData ||
-                              snapshot.data == false) {
-                            return DragTarget<Player>(
-                              onWillAccept: (draggedPlayer) {
-                                // Asynchronous check outside of onWillAccept
-                                _checkIfPlayerCanBeAccepted(
-                                    draggedPlayer, teamPlayer as Player);
-                                return true; // Always return true to allow the drag operation
-                              },
-                              onAccept: (draggedPlayer) {
-                                _updatePlayerCollection(
-                                    draggedPlayer, teamPlayer as Player);
-                              },
-                              builder: (context, candidateData, rejectedData) {
-                                return AnimatedContainer(
-                                  duration: const Duration(milliseconds: 200),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: candidateData.isNotEmpty
-                                          ? Colors.green
-                                          : Colors.transparent,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: StickerWidget(
-                                      player: teamPlayer as Player),
-                                );
-                              },
-                            );
-                          } else {
-                            // If the player is collected
-                            return StickerCardWidget(
-                                player: teamPlayer as Player);
+                      final teamPlayer = widget.team.players?[index];
+                      return DragTarget<Player>(
+                        onWillAccept: (draggedPlayer) {
+                          if (teamPlayer!.isCollected) {
+                            //TODO: mejora que aparezca al soltar
+                            _showMessage('Ya pegaste este juador', false);
+                            return false;
                           }
+                          if (draggedPlayer?.id != teamPlayer.id) {
+                            _showMessage('Jugador incorrecto', false);
+                            return false;
+                          }
+
+                          return true;
+                        },
+                        onAccept: (draggedPlayer) {
+                          _updatePlayerCollection(draggedPlayer, teamPlayer!);
+                        },
+                        builder: (context, candidateData, rejectedData) {
+                          return AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: candidateData.isNotEmpty
+                                    ? Colors.green
+                                    : Colors.transparent,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: teamPlayer!.isCollected
+                                ? StickerCardWidget(player: teamPlayer)
+                                : StickerWidget(player: teamPlayer),
+                          );
                         },
                       );
                     },
@@ -241,29 +229,6 @@ class TeamDetailPageState extends State<TeamDetailPage> {
         child: const Icon(Icons.list),
       ),
     );
-  }
-
-  Future<void> _checkIfPlayerCanBeAccepted(
-      Player? draggedPlayer, Player teamPlayer) async {
-    if (draggedPlayer == null) return;
-
-    bool isCollected = await _isPlayerCollected(teamPlayer);
-    if (isCollected) {
-      _showMessage('Ya pegaste este jugador', false);
-    } else if (draggedPlayer.id != teamPlayer.id) {
-      _showMessage('Jugador incorrecto', false);
-    } else {
-      _showMessage('Jugador correcto', true);
-    }
-  }
-
-  Future<bool> _isPlayerCollected(Player teamPlayer) async {
-    final playerSnapshot = await teamPlayer.teamRef.get();
-    if (!playerSnapshot.exists) return false;
-
-    final player =
-        Player.fromJson(playerSnapshot.data() as Map<String, dynamic>);
-    return player.isCollected;
   }
 
   void _updatePlayerCollection(Player droppedPlayer, Player teamPlayer) {

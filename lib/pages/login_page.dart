@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/custom_btn.dart';
 import 'package:proyecto_final_facil/components/custom_textfield.dart';
 import 'package:proyecto_final_facil/components/square_btn.dart';
+import 'package:proyecto_final_facil/data.dart';
 import 'package:proyecto_final_facil/services/auth_service.dart';
-import 'package:proyecto_final_facil/services/player_service.dart';
+import 'package:proyecto_final_facil/services/store_services.dart';
 
 import '../components/login/text_divider.dart';
 
@@ -166,7 +167,21 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> createTeama() async {
-    await createAll();
-    print('Team created');
+    try {
+      var team = await getTeamWithPlayers('IijB8Z5HsopB0Ms9s0Y2');
+      print(team.players?[0].id);
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
+  Future<void> create() async {
+    //await savePlayer(romero());
+    try {
+      await saveTeam(boca());
+      print('Team created');
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 }
