@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_final_facil/components/sticker_collected.dart';
 import 'package:proyecto_final_facil/components/sticker_mazo.dart';
-import 'package:proyecto_final_facil/components/sticker_widget.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 import 'package:proyecto_final_facil/models/team.dart';
 
@@ -188,7 +188,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
                             ),
                             child: teamPlayer!.isCollected
                                 ? StickerCardWidget(player: teamPlayer)
-                                : StickerWidget(player: teamPlayer),
+                                : StickerCollected(player: teamPlayer),
                           );
                         },
                       );

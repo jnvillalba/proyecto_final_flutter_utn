@@ -21,6 +21,7 @@ class CustomTextfield extends StatelessWidget {
         vertical: 10,
       ),
       child: TextField(
+        controller: controller,
         obscureText: obscureText,
         decoration: InputDecoration(
             hintText: hintText,

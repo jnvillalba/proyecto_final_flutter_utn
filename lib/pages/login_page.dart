@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/custom_btn.dart';
 import 'package:proyecto_final_facil/components/custom_textfield.dart';
 import 'package:proyecto_final_facil/components/square_btn.dart';
-import 'package:proyecto_final_facil/data.dart';
 import 'package:proyecto_final_facil/services/auth_service.dart';
-import 'package:proyecto_final_facil/services/store_services.dart';
 
 import '../components/login/text_divider.dart';
 
@@ -28,9 +26,16 @@ class _LoginPageState extends State<LoginPage> {
     final String email = userNameController.text;
     final String password = passwordController.text;
 
+    if (email.isEmpty || password.isEmpty) {
+      _showErrorDialog('Por favor, complete los campos.');
+      return;
+    }
+
     _showLoadingDialog();
+
     try {
       AuthService().signInWithMail(email, password);
+
       _navigateToHome();
     } on FirebaseAuthException catch (e) {
       _handleAuthException(e);
@@ -93,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void _navigateToHome() {
     if (mounted) {
+      Navigator.of(context, rootNavigator: true).pop();
       Navigator.of(context).pushReplacementNamed('/home');
     }
   }
@@ -153,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SquareBtn(
-                    onTap: () => createTeama(),
+                    onTap: () => AuthService().signInWithGoogle(),
                     imagePath: 'lib/icons/google.png',
                     height: 50,
                   ),
@@ -165,23 +171,23 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
-  Future<void> createTeama() async {
-    try {
-      var team = await getTeamWithPlayers('IijB8Z5HsopB0Ms9s0Y2');
-      print(team.players?[0].id);
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
-
-  Future<void> create() async {
-    //await savePlayer(romero());
-    try {
-      await saveTeam(boca());
-      print('Team created');
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
 }
+//   Future<void> createTeama() async {
+//     try {
+//       var team = await getTeamWithPlayers('IijB8Z5HsopB0Ms9s0Y2');
+//       print(team.players?[0].id);
+//     } catch (e) {
+//       print('Error: $e');
+//     }
+//   }
+//
+//   Future<void> create() async {
+//     //await savePlayer(romero());
+//     try {
+//       await saveTeam(boca());
+//       print('Team created');
+//     } catch (e) {
+//       print('Error: $e');
+//     }
+//   }
+// }

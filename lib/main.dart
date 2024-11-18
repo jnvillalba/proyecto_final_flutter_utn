@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
 }
 
 //TODO: ideas
-// persistencia
+// servicios
 // - abrir sobres - aca puedo aplicar animacion y una pagina solo para eso
 // - cambio de pagina dentro de un equipo
 // - ver perfil de jugador
@@ -46,3 +46,4 @@ class MyApp extends StatelessWidget {
 // sign out (FirebaseAuth.instance.signOut())
 // descartar repetidas (delete crud)
 // Update para actualizaar pegadas
+// menu principal

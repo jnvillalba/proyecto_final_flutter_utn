@@ -14,12 +14,16 @@ Future<void> saveTeam(Team team) async {
 
 Future<Player> getPlayer(String playerId) async {
   final doc = await db.collection('players').doc(playerId).get();
-  return Player.fromJson(doc.data()!);
+  final player = Player.fromJson(doc.data()!);
+  player.id = doc.id;
+  return player;
 }
 
 Future<Team> getTeam(String teamId) async {
   final doc = await db.collection('teams').doc(teamId).get();
-  return Team.fromJson(doc.data()!);
+  final team = Team.fromJson(doc.data()!);
+  team.id = doc.id;
+  return team;
 }
 
 Future<Team> _populateTeamWithPlayers(Team team) async {
