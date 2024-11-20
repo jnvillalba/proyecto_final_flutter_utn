@@ -28,6 +28,9 @@ class MyApp extends StatelessWidget {
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
         ),
       ),
       initialRoute: '/',
