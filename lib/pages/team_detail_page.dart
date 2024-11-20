@@ -1,31 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/sticker_collected.dart';
 import 'package:proyecto_final_facil/components/sticker_mazo.dart';
+import 'package:proyecto_final_facil/components/stickers_bottom/draggable_sticker_widget.dart';
+import 'package:proyecto_final_facil/components/stickers_bottom/stickers_modal_header.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 import 'package:proyecto_final_facil/models/team.dart';
-import 'package:proyecto_final_facil/services/player_service.dart';
+import 'package:proyecto_final_facil/services/store_services.dart';
 
 class TeamDetailPage extends StatefulWidget {
-  //TODO router
-  final Team team;
-
-  const TeamDetailPage({super.key, required this.team});
+  const TeamDetailPage({super.key});
 
   @override
   TeamDetailPageState createState() => TeamDetailPageState();
 }
 
 class TeamDetailPageState extends State<TeamDetailPage> {
-  //TODO ver de pasar a router con id
   late final Team team;
 
-  @override
-  void initState() {
-    super.initState();
-    team = widget.team;
-  }
-
-  late List<Player> players = [];
   Offset _dragPosition = const Offset(0, 0);
   bool _isDragging = false;
   Player? _draggedPlayer;
@@ -49,11 +40,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                'Figuritas disponibles:',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 16),
+              const StickersModalHeader(),
               SizedBox(
                 height: 160,
                 child: availableStickers.isEmpty
@@ -67,52 +54,28 @@ class TeamDetailPageState extends State<TeamDetailPage> {
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           children: availableStickers.map((player) {
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: Draggable<Player>(
-                                data: player,
-                                feedback: SizedBox(
-                                  height: 160,
-                                  width: 100,
-                                  child: StickerCardWidget(player: player),
-                                ),
-                                childWhenDragging: Opacity(
-                                  opacity: 0.5,
-                                  child: SizedBox(
-                                    height: 160,
-                                    width: 100,
-                                    child: StickerCardWidget(player: player),
-                                  ),
-                                ),
-                                child: SizedBox(
-                                  height: 160,
-                                  width: 100,
-                                  child: StickerCardWidget(player: player),
-                                ),
-                                onDragStarted: () {
-                                  setState(() {
-                                    _isDragging = true;
-                                    _draggedPlayer = player;
-                                  });
-                                },
-                                onDragUpdate: (details) {
-                                  setState(() {
-                                    _dragPosition = details.globalPosition;
-                                  });
-
-                                  if (details.globalPosition.dy <
-                                      MediaQuery.of(context).size.height -
-                                          200) {
-                                    Navigator.pop(context);
-                                  }
-                                },
-                                onDragEnd: (details) {
-                                  setState(() {
-                                    _dragPosition = details.offset;
-                                  });
-                                },
-                              ),
+                            return DraggableStickerWidget(
+                              player: player,
+                              onDragStarted: (draggedPlayer) {
+                                setState(() {
+                                  _isDragging = true;
+                                  _draggedPlayer = draggedPlayer;
+                                });
+                              },
+                              onDragUpdate: (position) {
+                                setState(() {
+                                  _dragPosition = position;
+                                });
+                                if (position.dy <
+                                    MediaQuery.of(context).size.height - 200) {
+                                  Navigator.pop(context);
+                                }
+                              },
+                              onDragEnd: () {
+                                setState(() {
+                                  _dragPosition = Offset.zero;
+                                });
+                              },
                             );
                           }).toList(),
                         ),
@@ -137,40 +100,59 @@ class TeamDetailPageState extends State<TeamDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(widget.team.name),
-            Image.network(
-              widget.team.badge,
-              height: 50,
+    final Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+
+    return FutureBuilder(
+      future: getTeamWithPlayers(arguments['teamId']),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Scaffold(
+            //TODO: pantalla de rror
+            appBar: AppBar(title: const Text('Error')),
+            body: Center(
+              child: Text('Error: ${snapshot.error}'),
             ),
-          ],
-        ),
-      ),
-      body: FutureBuilder(
-          future: getPlayersByTeamId(team.id!),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              return Center(
-                child: Text('Error: ${snapshot.error}'),
-              );
-            }
-            players = snapshot.data as List<Player>;
-            return _buildPlayers(context);
-          }),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showStickers(context),
-        child: const Icon(Icons.list),
-      ),
+          );
+        }
+
+        if (snapshot.hasData) {
+          team = snapshot.data!;
+
+          return Scaffold(
+            appBar: AppBar(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(team.name),
+                  Image.network(
+                    team.badge,
+                    height: 50,
+                  ),
+                ],
+              ),
+            ),
+            body: _buildPlayers(context),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => _showStickers(context),
+              child: const Icon(Icons.list),
+            ),
+          );
+        }
+
+        // Caso donde no hay datos
+        return Scaffold(
+          appBar: AppBar(title: const Text('Sin datos')),
+          body: const Center(child: Text('No se encontraron datos.')),
+        );
+      },
     );
   }
 
+//TODO implementar servicio
   void _updatePlayerCollection(Player droppedPlayer, Player teamPlayer) {
     setState(() {
       teamPlayer.isCollected = true;
@@ -202,10 +184,10 @@ class TeamDetailPageState extends State<TeamDetailPage> {
                     mainAxisSpacing: 20,
                     crossAxisSpacing: 20,
                   ),
-                  itemCount: widget.team.players?.length,
+                  itemCount: team.players?.length,
                   itemBuilder: (context, index) {
                     final teamPlayer =
-                        sortPlayersByPosition(widget.team.players!)[index];
+                        sortPlayersByPosition(team.players!)[index];
                     return DragTarget<Player>(
                       onWillAccept: (draggedPlayer) {
                         if (teamPlayer.isCollected) {

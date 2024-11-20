@@ -9,7 +9,10 @@ class TeamCard extends StatelessWidget {
   void _onTeamTap(BuildContext context, Team team) {
     Navigator.pushNamed(
       context,
-      '/team/${team.id}',
+      '/team',
+      arguments: {
+        'teamId': team.id,
+      },
     );
   }
 

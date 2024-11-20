@@ -38,11 +38,15 @@ Future<Team> _populateTeamWithPlayers(Team team) async {
 }
 
 Future<Team> getTeamWithPlayers(String teamId) async {
-  if (teamId.isEmpty) {
-    throw Exception('Team ID is required');
+  try {
+    if (teamId.isEmpty) {
+      throw Exception('Team ID is required');
+    }
+    final team = await getTeam(teamId);
+    return await _populateTeamWithPlayers(team);
+  } catch (e) {
+    throw Exception('Error al obtener equipo y jugadores de id $teamId: $e');
   }
-  final team = await getTeam(teamId);
-  return await _populateTeamWithPlayers(team);
 }
 
 Future<List<Team>> getAllTeamsWithPlayers() async {
