@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/sticker_collected.dart';
 import 'package:proyecto_final_facil/components/sticker_mazo.dart';
-import 'package:proyecto_final_facil/components/stickers_bottom/draggable_sticker_widget.dart';
-import 'package:proyecto_final_facil/components/stickers_bottom/stickers_modal_header.dart';
+import 'package:proyecto_final_facil/components/stickers_bottom/bottom_container.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 import 'package:proyecto_final_facil/models/team.dart';
 import 'package:proyecto_final_facil/services/store_services.dart';
@@ -35,54 +34,27 @@ class TeamDetailPageState extends State<TeamDetailPage> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Container(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const StickersModalHeader(),
-              SizedBox(
-                height: 160,
-                child: availableStickers.isEmpty
-                    ? Center(
-                        child: Text(
-                          'No hay stickers disponibles',
-                          style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                      )
-                    : SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: availableStickers.map((player) {
-                            return DraggableStickerWidget(
-                              player: player,
-                              onDragStarted: (draggedPlayer) {
-                                setState(() {
-                                  _isDragging = true;
-                                  _draggedPlayer = draggedPlayer;
-                                });
-                              },
-                              onDragUpdate: (position) {
-                                setState(() {
-                                  _dragPosition = position;
-                                });
-                                if (position.dy <
-                                    MediaQuery.of(context).size.height - 200) {
-                                  Navigator.pop(context);
-                                }
-                              },
-                              onDragEnd: () {
-                                setState(() {
-                                  _dragPosition = Offset.zero;
-                                });
-                              },
-                            );
-                          }).toList(),
-                        ),
-                      ),
-              ),
-            ],
-          ),
+        return BottomContainer(
+          availableStickers: availableStickers,
+          onDragStarted: (draggedPlayer) {
+            setState(() {
+              _isDragging = true;
+              _draggedPlayer = draggedPlayer;
+            });
+          },
+          onDragUpdate: (position) {
+            setState(() {
+              _dragPosition = position;
+            });
+            if (position.dy < MediaQuery.of(context).size.height - 200) {
+              Navigator.pop(context);
+            }
+          },
+          onDragEnd: () {
+            setState(() {
+              _dragPosition = Offset.zero;
+            });
+          },
         );
       },
     );
@@ -119,7 +91,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
         }
 
         if (snapshot.hasData) {
-          team = snapshot.data!; // No need for late anymore
+          team = snapshot.data!;
 
           return Scaffold(
             appBar: AppBar(
@@ -142,7 +114,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
           );
         }
 
-        // Caso donde no hay datos
+        // TODO Caso donde no hay datos
         return Scaffold(
           appBar: AppBar(title: const Text('Sin datos')),
           body: const Center(child: Text('No se encontraron datos.')),

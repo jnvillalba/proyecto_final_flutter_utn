@@ -3,7 +3,7 @@ import 'package:proyecto_final_facil/models/player.dart';
 import 'package:proyecto_final_facil/models/team.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
-
+//TODO implementar excepciones y manejo de errores
 Future<void> savePlayer(Player player) async {
   await db.collection('players').doc(player.id).set(player.toJson());
 }
