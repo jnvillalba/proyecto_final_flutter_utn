@@ -15,7 +15,7 @@ class TeamDetailPage extends StatefulWidget {
 }
 
 class TeamDetailPageState extends State<TeamDetailPage> {
-  late final Team team;
+  Team? team;
 
   Offset _dragPosition = const Offset(0, 0);
   bool _isDragging = false;
@@ -23,7 +23,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
 
   // TODO: Implementar con persistencia al iniciar
   List<Player> availableStickers = [
-    //romero(),
+    // romero(),
   ];
 
   List<Player> sortPlayersByPosition(List<Player> players) {
@@ -102,7 +102,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
   Widget build(BuildContext context) {
     final Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
-    return FutureBuilder(
+    return FutureBuilder<Team>(
       future: getTeamWithPlayers(arguments['teamId']),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -111,7 +111,6 @@ class TeamDetailPageState extends State<TeamDetailPage> {
 
         if (snapshot.hasError) {
           return Scaffold(
-            //TODO: pantalla de rror
             appBar: AppBar(title: const Text('Error')),
             body: Center(
               child: Text('Error: ${snapshot.error}'),
@@ -120,16 +119,16 @@ class TeamDetailPageState extends State<TeamDetailPage> {
         }
 
         if (snapshot.hasData) {
-          team = snapshot.data!;
+          team = snapshot.data!; // No need for late anymore
 
           return Scaffold(
             appBar: AppBar(
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(team.name),
+                  Text(team!.name),
                   Image.network(
-                    team.badge,
+                    team!.badge,
                     height: 50,
                   ),
                 ],
@@ -152,7 +151,6 @@ class TeamDetailPageState extends State<TeamDetailPage> {
     );
   }
 
-//TODO implementar servicio
   void _updatePlayerCollection(Player droppedPlayer, Player teamPlayer) {
     setState(() {
       teamPlayer.isCollected = true;
@@ -173,7 +171,9 @@ class TeamDetailPageState extends State<TeamDetailPage> {
             children: [
               Text(
                 'Jugadores:',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                    ),
               ),
               const SizedBox(height: 16),
               Expanded(
@@ -184,15 +184,14 @@ class TeamDetailPageState extends State<TeamDetailPage> {
                     mainAxisSpacing: 20,
                     crossAxisSpacing: 20,
                   ),
-                  itemCount: team.players?.length,
+                  itemCount: team?.players?.length,
                   itemBuilder: (context, index) {
                     final teamPlayer =
-                        sortPlayersByPosition(team.players!)[index];
+                        sortPlayersByPosition(team!.players!)[index];
                     return DragTarget<Player>(
                       onWillAccept: (draggedPlayer) {
                         if (teamPlayer.isCollected) {
-                          //TODO: mejora que aparezca al soltar
-                          _showMessage('Ya pegaste este juador', false);
+                          _showMessage('Ya pegaste este jugador', false);
                           return false;
                         }
                         if (draggedPlayer?.id != teamPlayer.id) {
