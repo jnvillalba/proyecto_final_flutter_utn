@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/services/auth_service.dart';
 
@@ -8,8 +7,7 @@ class MenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     void navigate(BuildContext context, String route) {
-      User? user = FirebaseAuth.instance.currentUser;
-      String? userId = user?.uid;
+      final userId = getCurrentUserId();
       if (userId == null) {
         AuthService().logout(context);
         return;

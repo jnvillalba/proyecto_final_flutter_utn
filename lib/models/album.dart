@@ -5,10 +5,14 @@ part 'album.g.dart';
 @JsonSerializable()
 class Album {
   final String userId;
-  final List<String> stickersIds = [];
-  final List<String> collectedIds = [];
+  final List<String> stickersIds;
+  final List<String> collectedIds;
 
-  Album({required this.userId});
+  Album({
+    required this.userId,
+    required this.stickersIds,
+    required this.collectedIds,
+  });
 
   factory Album.fromJson(Map<String, dynamic> json) => _$AlbumFromJson(json);
 

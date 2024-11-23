@@ -33,17 +33,23 @@ class AuthService {
   }
 
   Future<void> _createAlbumIfNotExists(User? user) async {
-    if (user == null) return;
-
+    if (user == null) {
+      print('_createAlbumIfNotExists, user null');
+      return;
+    }
     final userId = user.uid;
-    final albumDoc =
-        FirebaseFirestore.instance.collection('albums').doc(userId);
+    try {
+      final albumDoc =
+          FirebaseFirestore.instance.collection('albums').doc(userId);
 
-    final albumSnapshot = await albumDoc.get();
+      final albumSnapshot = await albumDoc.get();
 
-    if (!albumSnapshot.exists) {
-      final album = Album(userId: userId);
-      await albumDoc.set(album.toJson());
+      if (!albumSnapshot.exists) {
+        final album = Album(userId: userId, stickersIds: [], collectedIds: []);
+        await albumDoc.set(album.toJson());
+      }
+    } catch (e) {
+      print("Error creating album for : $userId");
     }
   }
 
@@ -71,4 +77,10 @@ class AuthService {
       );
     }
   }
+}
+
+String? getCurrentUserId() {
+  User? user = FirebaseAuth.instance.currentUser;
+  String? userId = user?.uid;
+  return userId;
 }

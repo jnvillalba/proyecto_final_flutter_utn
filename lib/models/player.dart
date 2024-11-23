@@ -33,4 +33,8 @@ class Player {
   factory Player.fromJson(Map<String, dynamic> json) => _$PlayerFromJson(json);
 
   Map<String, dynamic> toJson() => _$PlayerToJson(this);
+
+  void setCollected() {
+    isCollected = true;
+  }
 }

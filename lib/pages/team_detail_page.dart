@@ -4,6 +4,7 @@ import 'package:proyecto_final_facil/components/sticker_mazo.dart';
 import 'package:proyecto_final_facil/components/stickers_bottom/bottom_container.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 import 'package:proyecto_final_facil/models/team.dart';
+import 'package:proyecto_final_facil/services/album_service.dart';
 import 'package:proyecto_final_facil/services/store_services.dart';
 
 class TeamDetailPage extends StatefulWidget {
@@ -21,9 +22,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
   Player? _draggedPlayer;
 
   // TODO: Implementar con persistencia al iniciar
-  List<Player> availableStickers = [
-    // romero(),
-  ];
+  List<Player> availableStickers = [];
 
   List<Player> sortPlayersByPosition(List<Player> players) {
     players.sort((a, b) => a.position.index.compareTo(b.position.index));
@@ -34,26 +33,45 @@ class TeamDetailPageState extends State<TeamDetailPage> {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return BottomContainer(
-          availableStickers: availableStickers,
-          onDragStarted: (draggedPlayer) {
-            setState(() {
-              _isDragging = true;
-              _draggedPlayer = draggedPlayer;
-            });
-          },
-          onDragUpdate: (position) {
-            setState(() {
-              _dragPosition = position;
-            });
-            if (position.dy < MediaQuery.of(context).size.height - 200) {
-              Navigator.pop(context);
+        return FutureBuilder<List<Player>>(
+          future: getPlayersFromStickers(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
             }
-          },
-          onDragEnd: () {
-            setState(() {
-              _dragPosition = Offset.zero;
-            });
+
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+
+            if (snapshot.hasData) {
+              List<Player> availableStickers = snapshot.data!;
+
+              return BottomContainer(
+                availableStickers: availableStickers,
+                onDragStarted: (draggedPlayer) {
+                  setState(() {
+                    _isDragging = true;
+                    _draggedPlayer = draggedPlayer;
+                  });
+                },
+                onDragUpdate: (position) {
+                  setState(() {
+                    _dragPosition = position;
+                  });
+                  if (position.dy < MediaQuery.of(context).size.height - 200) {
+                    Navigator.pop(context);
+                  }
+                },
+                onDragEnd: () {
+                  setState(() {
+                    _dragPosition = Offset.zero;
+                  });
+                },
+              );
+            }
+
+            return const Center(child: Text('No hay stickers disponibles.'));
           },
         );
       },
