@@ -188,7 +188,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
                       onAccept: (draggedPlayer) {
                         if (teamPlayer.isCollected) {
                           _showMessage('Ya pegaste este jugador', false);
-                        } else if (draggedPlayer?.id != teamPlayer.id) {
+                        } else if (draggedPlayer.id != teamPlayer.id) {
                           _showMessage('Jugador incorrecto', false);
                         } else {
                           _updatePlayerCollection(draggedPlayer, teamPlayer);

@@ -251,14 +251,7 @@ Team getRiver() {
     name: 'River',
     badge:
         'https://tmssl.akamaized.net//images/wappen/head/209.png?lm=1645539487',
-    players: [
-      Player(
-        name: 'Player 3',
-        position: PlayerPosition.defender,
-        imageUrl: 'https://example.com/player3.png',
-        number: 1,
-      ),
-    ],
+    players: [],
   );
 }
 
@@ -267,14 +260,7 @@ Team getCAI() {
     name: 'Independiente',
     badge:
         'https://tmssl.akamaized.net//images/wappen/head/1234.png?lm=1489920510',
-    players: [
-      Player(
-        name: 'Player 3',
-        position: PlayerPosition.defender,
-        imageUrl: 'https://example.com/player3.png',
-        number: 1,
-      ),
-    ],
+    players: [],
   );
 }
 
@@ -283,14 +269,7 @@ Team getGC() {
     name: 'Godoy Cruz',
     badge:
         'https://tmssl.akamaized.net//images/wappen/head/12574.png?lm=1412763466',
-    players: [
-      Player(
-        name: 'Player 3',
-        position: PlayerPosition.defender,
-        imageUrl: 'https://example.com/player3.png',
-        number: 1,
-      ),
-    ],
+    players: [],
   );
 }
 
@@ -299,13 +278,71 @@ Team getEstudiantes() {
     name: 'Estudiantes',
     badge:
         'https://tmssl.akamaized.net//images/wappen/head/288.png?lm=1615331978',
-    players: [
-      Player(
-        name: 'Player 3',
-        position: PlayerPosition.defender,
-        imageUrl: 'https://example.com/player3.png',
-        number: 1,
-      ),
-    ],
+    players: [],
   );
 }
+
+Team velez() {
+  return Team(
+    name: 'Vélez Sarsfield',
+    badge:
+        'https://tmssl.akamaized.net//images/wappen/head/1029.png?lm=1634518202',
+    players: [],
+  );
+}
+
+Team sLorenzo() {
+  return Team(
+    name: 'San Lorenzo',
+    badge:
+        'https://tmssl.akamaized.net//images/wappen/head/1775.png?lm=1723433116',
+    players: [],
+  );
+}
+
+Team talleres() {
+  return Team(
+    name: 'Talleres',
+    badge:
+        'https://tmssl.akamaized.net//images/wappen/head/3938.png?lm=1636589988',
+    players: [],
+  );
+}
+
+Team rc() {
+  return Team(
+    name: 'Rosario Central',
+    badge: 'Rosario Central',
+    players: [],
+  );
+}
+
+Team riestra() {
+  return Team(
+    name: 'Riestra',
+    badge:
+        'https://tmssl.akamaized.net//images/wappen/head/19775.png?lm=1487795829',
+    players: [],
+    playerIds: ["N8EULGauHrsice5Gw0WO"],
+  );
+}
+
+Player spreen() {
+  return Player(
+    name: 'Iván "Spreen" Buhajeruk',
+    position: PlayerPosition.forward,
+    imageUrl:
+        'https://img.a.transfermarkt.technology/portrait/header/1341853-1731349912.JPG?lm=1',
+    number: 47,
+  );
+}
+
+// Team getGC() {
+//   return Team(
+//     name: 'Godoy Cruz',
+//     badge:
+//     '',
+//     players: [],
+//   );
+// }
+//

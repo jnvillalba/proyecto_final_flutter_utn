@@ -34,11 +34,18 @@ Future<Team> getTeam(String teamId) async {
 }
 
 Future<Team> _populateTeamWithPlayers(Team team) async {
-  final players = await Future.wait(
-    team.playerIds.map((playerId) async => await getPlayer(playerId!)),
-  );
-  team.players = players;
-  return team;
+  try {
+    if (team.playerIds.isEmpty) {
+      return team;
+    }
+    final players = await Future.wait(
+      team.playerIds.map((playerId) async => await getPlayer(playerId!)),
+    );
+    team.players = players;
+    return team;
+  } catch (e) {
+    throw Exception('Error al obtener jugadores de equipo: ${team.name} $e');
+  }
 }
 
 Future<Team> getTeamWithPlayers(String teamId) async {
@@ -82,7 +89,7 @@ Future<Team> _updateTeamPlayersCollected(Team team) async {
 
 Future<List<Team>> getAllTeamsWithPlayers() async {
   try {
-    final teamQuery = await db.collection('teams').get();
+    final teamQuery = await db.collection('teams').orderBy('name').get();
 
     return await Future.wait(
       teamQuery.docs.map((teamDoc) async {
@@ -92,6 +99,6 @@ Future<List<Team>> getAllTeamsWithPlayers() async {
       }).toList(),
     );
   } catch (e) {
-    throw Exception('Error al obtener equipos y jugadores: $e');
+    throw Exception('Error getAllTeamsWithPlayers: $e');
   }
 }

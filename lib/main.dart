@@ -56,4 +56,4 @@ class MyApp extends StatelessWidget {
 // badge con secciones
 // sign out (FirebaseAuth.instance.signOut())
 // descartar repetidas (delete crud)
-// Update para actualizaar pegadas
+// Update para actualizar pegadas

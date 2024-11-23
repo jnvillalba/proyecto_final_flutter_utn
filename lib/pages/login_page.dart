@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/custom_btn.dart';
 import 'package:proyecto_final_facil/components/custom_textfield.dart';
 import 'package:proyecto_final_facil/components/square_btn.dart';
-import 'package:proyecto_final_facil/data.dart';
 import 'package:proyecto_final_facil/services/auth_service.dart';
-import 'package:proyecto_final_facil/services/store_services.dart';
 
 import '../components/login/text_divider.dart';
 
@@ -52,8 +50,7 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) =>
-      const AlertDialog(
+      builder: (_) => const AlertDialog(
         title: Text('Logging in...'),
         content: LinearProgressIndicator(),
       ),
@@ -74,17 +71,16 @@ class _LoginPageState extends State<LoginPage> {
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
-      builder: (_) =>
-          AlertDialog(
-            title: const Text('Error'),
-            content: Text(message),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: const Text('OK'),
-              ),
-            ],
+      builder: (_) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('OK'),
           ),
+        ],
+      ),
     );
   }
 
@@ -177,23 +173,3 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 }
-
-Future<void> createTeama() async {
-  try {
-    saveTeam(boca());
-  } catch (e) {
-    print('Error: $e');
-  }
-}
-
-// Future<void> createplayers() async {
-//   var List<Player> players = playersBoca();
-//   try {
-//     for (var player in playersBoca()) {
-//       await savePlayer(player);
-//       print(player.name);
-//     }
-//   } catch (e) {
-//     print('Error: $e');
-//   }
-// }

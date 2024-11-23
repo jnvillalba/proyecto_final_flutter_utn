@@ -37,12 +37,15 @@ class TeamCard extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
               const SizedBox(height: 16),
-              Text(
-                team.name,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  team.name,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],

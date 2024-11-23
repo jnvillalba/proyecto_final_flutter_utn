@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_final_facil/data.dart';
+import 'package:proyecto_final_facil/models/team.dart';
 import 'package:proyecto_final_facil/services/auth_service.dart';
+import 'package:proyecto_final_facil/services/store_services.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({super.key});
@@ -22,10 +25,33 @@ class MenuPage extends StatelessWidget {
       }
     }
 
+    Future<void> createplayers() async {
+      try {
+        var player = spreen();
+        await savePlayer(player);
+        print(player.name);
+      } catch (e) {
+        print('Error: $e');
+      }
+    }
+
+    Future<void> createTeam() async {
+      try {
+        Team team = riestra();
+        saveTeam(team);
+        var name = team.name;
+        print('Created: $name');
+      } catch (e) {
+        print('Error: $e');
+      }
+    }
+
     final List<Map<String, dynamic>> menuOptions = [
       {'label': 'Álbum', 'onTap': () => navigate(context, '/home')},
       {'label': 'Abrir Sobre', 'onTap': () => navigate(context, '/open')},
       {'label': 'Logout', 'onTap': () => AuthService().logout(context)},
+      {'label': 'Create Team', 'onTap': () => createTeam()},
+      {'label': 'Create Player', 'onTap': () => createplayers()},
     ];
 
     return Scaffold(
