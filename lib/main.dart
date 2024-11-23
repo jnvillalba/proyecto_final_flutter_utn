@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/firebase_options.dart';
 import 'package:proyecto_final_facil/pages/auth_page.dart';
+import 'package:proyecto_final_facil/pages/home_page.dart';
+import 'package:proyecto_final_facil/pages/menu_page.dart';
 import 'package:proyecto_final_facil/pages/team_detail_page.dart';
 
 Future main() async {
@@ -37,14 +39,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const AuthPage(),
         '/team': (context) => const TeamDetailPage(),
+        '/menu': (context) => const MenuPage(),
+        '/home': (context) => const AlbumPage(),
       },
-      onGenerateRoute: onGenerateRoute,
-    );
-  }
-
-  Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    return MaterialPageRoute(
-      builder: (context) => const AuthPage(),
     );
   }
 }

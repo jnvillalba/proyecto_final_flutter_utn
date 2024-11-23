@@ -1,16 +1,35 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:proyecto_final_facil/services/auth_service.dart';
 
 class MenuPage extends StatelessWidget {
-  final List<Map<String, dynamic>> menuOptions = [
-    {'label': 'Álbum', 'onTap': () => print('Ir al Álbum')},
-    {'label': 'Abrir Sobre', 'onTap': () => print('Abrir Sobre')},
-    {'label': 'Logout', 'onTap': () => print('Logout')},
-  ];
-
-  MenuPage({super.key});
+  const MenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    void navigate(BuildContext context, String route) {
+      User? user = FirebaseAuth.instance.currentUser;
+      String? userId = user?.uid;
+      if (userId == null) {
+        AuthService().logout(context);
+        return;
+      } else {
+        Navigator.pushNamed(
+          context,
+          route,
+          arguments: {
+            'userid': userId,
+          },
+        );
+      }
+    }
+
+    final List<Map<String, dynamic>> menuOptions = [
+      {'label': 'Álbum', 'onTap': () => navigate(context, '/home')},
+      {'label': 'Abrir Sobre', 'onTap': () => navigate(context, '/open')},
+      {'label': 'Logout', 'onTap': () => AuthService().logout(context)},
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Menú'),

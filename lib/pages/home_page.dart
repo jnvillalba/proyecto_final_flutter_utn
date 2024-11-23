@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/team_card.dart';
 import 'package:proyecto_final_facil/models/team.dart';
-import 'package:proyecto_final_facil/services/auth_service.dart';
 import 'package:proyecto_final_facil/services/store_services.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key, required List teams});
+class AlbumPage extends StatefulWidget {
+  const AlbumPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<AlbumPage> createState() => _AlbumPageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  late final List<Team> teams;
+class _AlbumPageState extends State<AlbumPage> {
+  late List<Team> teams = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ÁlbUTN'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            onPressed: () => AuthService().logout(context),
-          ),
-        ],
       ),
       body: FutureBuilder(
           future: getAllTeamsWithPlayers(),

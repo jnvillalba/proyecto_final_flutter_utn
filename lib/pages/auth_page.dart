@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/pages/login_page.dart';
-
-import 'home_page.dart';
+import 'package:proyecto_final_facil/pages/menu_page.dart';
 
 class AuthPage extends StatelessWidget {
   const AuthPage({super.key});
@@ -16,10 +15,7 @@ class AuthPage extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         if (snapshot.hasData) {
-          // HomePage()
-          return const HomePage(
-            teams: [],
-          );
+          return const MenuPage();
         } else {
           return const LoginPage();
         }
