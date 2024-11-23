@@ -52,7 +52,8 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (_) => const AlertDialog(
+      builder: (_) =>
+      const AlertDialog(
         title: Text('Logging in...'),
         content: LinearProgressIndicator(),
       ),
@@ -73,16 +74,17 @@ class _LoginPageState extends State<LoginPage> {
   void _showErrorDialog(String message) {
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Error'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+      builder: (_) =>
+          AlertDialog(
+            title: const Text('Error'),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -161,8 +163,8 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SquareBtn(
-                    //onTap: _signInGoogle,
-                    onTap: () => createTeama(),
+                    onTap: _signInGoogle,
+                    //onTap: () => createTeama(),
                     imagePath: 'lib/icons/google.png',
                     height: 50,
                   ),

@@ -1,26 +1,50 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../models/album.dart';
+
 class AuthService {
-  signInWithGoogle() async {
+  Future<void> signInWithGoogle() async {
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
 
-    final GoogleSignInAuthentication gAuth = await gUser!.authentication;
+    if (gUser == null) return;
+
+    final GoogleSignInAuthentication gAuth = await gUser.authentication;
 
     final credential = GoogleAuthProvider.credential(
       accessToken: gAuth.accessToken,
       idToken: gAuth.idToken,
     );
 
-    return await FirebaseAuth.instance.signInWithCredential(credential);
+    final userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    await _createAlbumIfNotExists(userCredential.user);
   }
 
-  void signInWithMail(email, password) async {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
+  Future<void> signInWithMail(String email, String password) async {
+    final userCredential =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
+    await _createAlbumIfNotExists(userCredential.user);
+  }
+
+  Future<void> _createAlbumIfNotExists(User? user) async {
+    if (user == null) return;
+
+    final userId = user.uid;
+    final albumDoc =
+        FirebaseFirestore.instance.collection('albums').doc(userId);
+
+    final albumSnapshot = await albumDoc.get();
+
+    if (!albumSnapshot.exists) {
+      final album = Album(userId: userId);
+      await albumDoc.set(album.toJson());
+    }
   }
 
   String getErrorMessageMail(FirebaseAuthException e) {

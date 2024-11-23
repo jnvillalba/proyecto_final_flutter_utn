@@ -1,22 +1,16 @@
-import 'package:proyecto_final_facil/models/player.dart';
-import 'package:proyecto_final_facil/models/team.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+part 'album.g.dart';
+
+@JsonSerializable()
 class Album {
-  final List<Team> teams;
-  final List<Player> mazo = [];
-  final List<Player> collected = [];
+  final String userId;
+  final List<String> stickersIds = [];
+  final List<String> collectedIds = [];
 
-  Album({required this.teams});
+  Album({required this.userId});
 
-  int get totalPlayers =>
-      teams.fold(0, (sum, team) => sum + team.players!.length);
+  factory Album.fromJson(Map<String, dynamic> json) => _$AlbumFromJson(json);
 
-  int get collectedPlayers => teams.fold(
-        0,
-        (sum, team) =>
-            sum + team.players!.where((player) => player.isCollected).length,
-      );
-
-  double get collectionProgress =>
-      totalPlayers > 0 ? (collectedPlayers / totalPlayers) * 100 : 0;
+  Map<String, dynamic> toJson() => _$AlbumToJson(this);
 }
