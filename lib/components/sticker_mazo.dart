@@ -26,15 +26,17 @@ class StickerCardWidget extends StatelessWidget {
           Container(
             color: Colors.white,
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              player.name,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                player.name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
               ),
-              textAlign: TextAlign.center,
             ),
-          ),
+          )
         ],
       ),
     );

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/sticker_mazo.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 
-class DraggableStickerWidget extends StatelessWidget {
+class DraggableSticker extends StatelessWidget {
   final Player player;
   final ValueChanged<Player> onDragStarted;
   final ValueChanged<Offset> onDragUpdate;
   final VoidCallback onDragEnd;
 
-  const DraggableStickerWidget({
+  const DraggableSticker({
     super.key,
     required this.player,
     required this.onDragStarted,
@@ -36,8 +36,8 @@ class DraggableStickerWidget extends StatelessWidget {
           ),
         ),
         child: SizedBox(
-          height: 160,
-          width: 100,
+          height: 150,
+          width: 125,
           child: StickerCardWidget(player: player),
         ),
         onDragStarted: () => onDragStarted(player),

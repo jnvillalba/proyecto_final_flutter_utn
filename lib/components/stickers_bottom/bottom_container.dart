@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/stickers_bottom/stickers_modal_header.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 
-import 'draggable_sticker_widget.dart';
+import 'draggable_sticker.dart';
 
 class BottomContainer extends StatelessWidget {
   final List<Player> availableStickers;
@@ -31,7 +31,7 @@ class BottomContainer extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             child: Row(
               children: availableStickers.map((player) {
-                return DraggableStickerWidget(
+                return DraggableSticker(
                   player: player,
                   onDragStarted: onDragStarted,
                   onDragUpdate: onDragUpdate,

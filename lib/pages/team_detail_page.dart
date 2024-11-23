@@ -23,9 +23,33 @@ class TeamDetailPageState extends State<TeamDetailPage> {
 
   List<Player> availableStickers = [];
 
+  bool isLoading = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (team == null) {
+      _loadTeamData();
+    }
+  }
+
   List<Player> sortPlayersByPosition(List<Player> players) {
     players.sort((a, b) => a.position.index.compareTo(b.position.index));
     return players;
+  }
+
+  Future<void> _loadTeamData() async {
+    final Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    try {
+      team = await getTeamWithPlayersCollected(arguments['teamId']);
+      setState(() {
+        isLoading = false;
+      });
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   void _showStickers(BuildContext context) {
@@ -35,7 +59,6 @@ class TeamDetailPageState extends State<TeamDetailPage> {
         return FutureBuilder<List<Player>>(
           future: getPlayersFromStickers(),
           builder: (context, snapshot) {
-            //TODO refactor repetido snapshot
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -45,7 +68,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
             }
 
             if (snapshot.hasData) {
-              List<Player> availableStickers = snapshot.data!;
+              availableStickers = snapshot.data!;
 
               return BottomContainer(
                 availableStickers: availableStickers,
@@ -90,54 +113,37 @@ class TeamDetailPageState extends State<TeamDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
+    if (isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
-    return FutureBuilder<Team>(
-      future: getTeamWithPlayersCollected(arguments['teamId']),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    if (team == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: const Center(child: Text('No se encontraron datos.')),
+      );
+    }
 
-        if (snapshot.hasError) {
-          return Scaffold(
-            appBar: AppBar(title: const Text('Error')),
-            body: Center(
-              child: Text('Error: ${snapshot.error}'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(team!.name),
+            Image.network(
+              team!.badge,
+              height: 50,
             ),
-          );
-        }
-
-        if (snapshot.hasData) {
-          team = snapshot.data;
-
-          return Scaffold(
-            appBar: AppBar(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(team!.name),
-                  Image.network(
-                    team!.badge,
-                    height: 50,
-                  ),
-                ],
-              ),
-            ),
-            body: _buildPlayers(context),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () => _showStickers(context),
-              child: const Icon(Icons.list),
-            ),
-          );
-        }
-
-        // TODO Caso donde no hay datos
-        return Scaffold(
-          appBar: AppBar(title: const Text('Sin datos')),
-          body: const Center(child: Text('No se encontraron datos.')),
-        );
-      },
+          ],
+        ),
+      ),
+      body: _buildPlayers(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _showStickers(context),
+        child: const Icon(Icons.list),
+      ),
     );
   }
 
@@ -179,20 +185,14 @@ class TeamDetailPageState extends State<TeamDetailPage> {
                     final teamPlayer =
                         sortPlayersByPosition(team!.players!)[index];
                     return DragTarget<Player>(
-                      onWillAccept: (draggedPlayer) {
+                      onAccept: (draggedPlayer) {
                         if (teamPlayer.isCollected) {
                           _showMessage('Ya pegaste este jugador', false);
-                          return false;
-                        }
-                        if (draggedPlayer?.id != teamPlayer.id) {
+                        } else if (draggedPlayer?.id != teamPlayer.id) {
                           _showMessage('Jugador incorrecto', false);
-                          return false;
+                        } else {
+                          _updatePlayerCollection(draggedPlayer, teamPlayer);
                         }
-
-                        return true;
-                      },
-                      onAccept: (draggedPlayer) {
-                        _updatePlayerCollection(draggedPlayer, teamPlayer);
                       },
                       builder: (context, candidateData, rejectedData) {
                         return AnimatedContainer(
