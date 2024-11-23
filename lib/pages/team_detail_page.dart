@@ -21,7 +21,6 @@ class TeamDetailPageState extends State<TeamDetailPage> {
   bool _isDragging = false;
   Player? _draggedPlayer;
 
-  // TODO: Implementar con persistencia al iniciar
   List<Player> availableStickers = [];
 
   List<Player> sortPlayersByPosition(List<Player> players) {
@@ -36,6 +35,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
         return FutureBuilder<List<Player>>(
           future: getPlayersFromStickers(),
           builder: (context, snapshot) {
+            //TODO refactor repetido snapshot
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -93,7 +93,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
     final Map arguments = ModalRoute.of(context)!.settings.arguments as Map;
 
     return FutureBuilder<Team>(
-      future: getTeamWithPlayers(arguments['teamId']),
+      future: getTeamWithPlayersCollected(arguments['teamId']),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
@@ -109,7 +109,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
         }
 
         if (snapshot.hasData) {
-          team = snapshot.data!;
+          team = snapshot.data;
 
           return Scaffold(
             appBar: AppBar(

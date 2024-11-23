@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 import 'package:proyecto_final_facil/models/team.dart';
+import 'package:proyecto_final_facil/services/auth_service.dart';
+
+import '../models/album.dart';
+import 'album_service.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 //TODO implementar excepciones y manejo de errores
@@ -47,6 +51,33 @@ Future<Team> getTeamWithPlayers(String teamId) async {
   } catch (e) {
     throw Exception('Error al obtener equipo y jugadores de id $teamId: $e');
   }
+}
+
+Future<Team> getTeamWithPlayersCollected(String teamId) async {
+  try {
+    if (teamId.isEmpty) {
+      throw Exception('Team ID is required');
+    }
+    final team = await getTeam(teamId);
+    await _populateTeamWithPlayers(team);
+    return await _updateTeamPlayersCollected(team);
+  } catch (e) {
+    throw Exception('Error al obtener equipo y jugadores de id $teamId: $e');
+  }
+}
+
+Future<Team> _updateTeamPlayersCollected(Team team) async {
+  var userId = getCurrentUserId();
+  Album? album = await getAlbum(userId!);
+  if (album == null) {
+    return team;
+  }
+  for (var player in team.players!) {
+    if (album.collectedIds.contains(player.id) && !player.isCollected) {
+      player.setCollected();
+    }
+  }
+  return team;
 }
 
 Future<List<Team>> getAllTeamsWithPlayers() async {
