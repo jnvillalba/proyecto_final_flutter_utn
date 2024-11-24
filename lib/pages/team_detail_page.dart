@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_final_facil/components/empty_sticker.dart';
 import 'package:proyecto_final_facil/components/sticker_collected.dart';
-import 'package:proyecto_final_facil/components/sticker_mazo.dart';
 import 'package:proyecto_final_facil/components/stickers_bottom/bottom_container.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 import 'package:proyecto_final_facil/models/team.dart';
@@ -218,7 +218,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: teamPlayer.isCollected
-                              ? StickerCardWidget(player: teamPlayer)
+                              ? EmptySticker(player: teamPlayer)
                               : StickerCollected(player: teamPlayer),
                         );
                       },
@@ -237,13 +237,13 @@ class TeamDetailPageState extends State<TeamDetailPage> {
                 feedback: SizedBox(
                   height: 160,
                   width: 100,
-                  child: StickerCardWidget(player: _draggedPlayer!),
+                  child: EmptySticker(player: _draggedPlayer!),
                 ),
                 childWhenDragging: Container(),
                 child: SizedBox(
                   height: 160,
                   width: 100,
-                  child: StickerCardWidget(player: _draggedPlayer!),
+                  child: EmptySticker(player: _draggedPlayer!),
                 ),
                 onDragEnd: (details) {
                   setState(() {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_final_facil/components/sticker_mazo.dart';
+import 'package:proyecto_final_facil/components/empty_sticker.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 
 class DraggableSticker extends StatelessWidget {
@@ -25,20 +25,20 @@ class DraggableSticker extends StatelessWidget {
         feedback: SizedBox(
           height: 160,
           width: 100,
-          child: StickerCardWidget(player: player),
+          child: EmptySticker(player: player),
         ),
         childWhenDragging: Opacity(
           opacity: 0.5,
           child: SizedBox(
             height: 160,
             width: 100,
-            child: StickerCardWidget(player: player),
+            child: EmptySticker(player: player),
           ),
         ),
         child: SizedBox(
           height: 150,
           width: 125,
-          child: StickerCardWidget(player: player),
+          child: EmptySticker(player: player),
         ),
         onDragStarted: () => onDragStarted(player),
         onDragUpdate: (details) => onDragUpdate(details.globalPosition),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 
-class StickerCardWidget extends StatelessWidget {
+class EmptySticker extends StatelessWidget {
   final Player player;
 
-  const StickerCardWidget({super.key, required this.player});
+  const EmptySticker({super.key, required this.player});
 
   @override
   Widget build(BuildContext context) {
