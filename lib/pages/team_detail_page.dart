@@ -5,6 +5,7 @@ import 'package:proyecto_final_facil/components/stickers_bottom/bottom_container
 import 'package:proyecto_final_facil/models/player.dart';
 import 'package:proyecto_final_facil/models/team.dart';
 import 'package:proyecto_final_facil/services/album_service.dart';
+import 'package:proyecto_final_facil/services/auth_service.dart';
 import 'package:proyecto_final_facil/services/store_services.dart';
 
 class TeamDetailPage extends StatefulWidget {
@@ -147,14 +148,24 @@ class TeamDetailPageState extends State<TeamDetailPage> {
     );
   }
 
-  void _updatePlayerCollection(Player droppedPlayer, Player teamPlayer) {
-    setState(() {
-      teamPlayer.isCollected = true;
-      availableStickers.removeWhere((player) => player.id == droppedPlayer.id);
-      _isDragging = false;
-      _draggedPlayer = null;
-      _showMessage('${teamPlayer.name} agregado a la colección', true);
-    });
+  void _updatePlayerCollection(Player droppedPlayer) async {
+    try {
+      await collectSticker(
+        userId: getCurrentUserId()!,
+        playerId: droppedPlayer.id!,
+      );
+
+      await _loadTeamData();
+
+      setState(() {
+        _isDragging = false;
+        _draggedPlayer = null;
+      });
+
+      _showMessage('${droppedPlayer.name} agregado a la colección', true);
+    } catch (e) {
+      _showMessage('Error al agregar ${droppedPlayer.name}: $e', false);
+    }
   }
 
   Widget _buildPlayers(BuildContext context) {
@@ -191,7 +202,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
                         } else if (draggedPlayer.id != teamPlayer.id) {
                           _showMessage('Jugador incorrecto', false);
                         } else {
-                          _updatePlayerCollection(draggedPlayer, teamPlayer);
+                          _updatePlayerCollection(draggedPlayer);
                         }
                       },
                       builder: (context, candidateData, rejectedData) {
