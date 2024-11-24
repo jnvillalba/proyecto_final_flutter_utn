@@ -103,8 +103,8 @@ Future<void> collectSticker({
         'stickersIds': stickersIds,
         'collectedIds': collectedIds,
       });
+      print('El jugador $playerId agregado al album del usuario $userId');
     }
-    print('El jugador $playerId agregado al album del usuario $userId');
   } catch (e) {
     print('Error al actualizar el álbum: $e');
     rethrow;
