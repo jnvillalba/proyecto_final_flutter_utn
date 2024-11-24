@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:proyecto_final_facil/components/empty_sticker.dart';
 import 'package:proyecto_final_facil/components/open_package/package.dart';
 import 'package:proyecto_final_facil/components/open_package/shake_widget.dart';
+import 'package:proyecto_final_facil/data.dart';
+import 'package:vertical_card_pager/vertical_card_pager.dart';
 
 class OpenPackagePage extends StatefulWidget {
   const OpenPackagePage({super.key});
@@ -13,6 +16,16 @@ class OpenPackageState extends State<OpenPackagePage> {
   final shakeKey = GlobalKey<ShakeWidgetState>();
   bool showStikcers = false;
 
+  final List<String> titles = ['', '', '', '', ''];
+
+  final List<Widget> images = [
+    EmptySticker(player: playersBoca()[0]),
+    EmptySticker(player: playersBoca()[1]),
+    EmptySticker(player: playersBoca()[2]),
+    EmptySticker(player: playersBoca()[3]),
+    EmptySticker(player: playersBoca()[4])
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,41 +37,51 @@ class OpenPackageState extends State<OpenPackagePage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Only show the ShakeWidget (Package) if stickers are not shown
-                ShakeWidget(
-                  key: shakeKey,
-                  shakeCount: 6,
-                  shakeOffset: 10,
-                  shakeDuration: const Duration(milliseconds: 600),
-                  onShakeComplete: () {
-                    setState(() {
-                      showStikcers = true;
-                    });
-                  },
-                  child: GestureDetector(
-                    onTap: () {
-                      shakeKey.currentState
-                          ?.shake(); // Trigger shake when tapped
-                    },
-                    child: Visibility(
-                      visible: !showStikcers,
-                      // Hide the original package when stickers are shown
-                      child: const Package(),
-                    ),
-                  ),
-                ),
-                if (showStikcers) ...[
-                  const Text(
-                    "List of Envelopes",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  ...List.generate(5, (index) {
-                    return const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8.0),
-                      child: Package(), // Display the closed envelope
-                    );
-                  }),
-                ],
+                showStikcers
+                    ? Expanded(
+                        child: VerticalCardPager(
+                          titles: titles,
+                          images: images,
+                          onSelectedItem: (index) {},
+                          initialPage: 2,
+                          align: ALIGN.CENTER,
+                          physics: const ClampingScrollPhysics(),
+                        ),
+                      )
+                    : ShakeWidget(
+                        key: shakeKey,
+                        shakeCount: 6,
+                        shakeOffset: 10,
+                        shakeDuration: const Duration(milliseconds: 600),
+                        onShakeComplete: () {
+                          setState(() {
+                            showStikcers = true;
+                          });
+                        },
+                        child: GestureDetector(
+                          onTap: () {
+                            shakeKey.currentState?.shake();
+                          },
+                          child: Visibility(
+                            visible: !showStikcers,
+                            child: const Column(
+                              children: [
+                                Package(),
+                                SizedBox(height: 20),
+                                Text(
+                                  'Toca para abrir',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white70,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
               ],
             ),
           ),

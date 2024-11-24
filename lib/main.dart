@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         '/team': (context) => const TeamDetailPage(),
         '/menu': (context) => const MenuPage(),
         '/home': (context) => const AlbumPage(),
-        '/open': (context) => OpenPackagePage(),
+        '/open': (context) => const OpenPackagePage(),
       },
       onGenerateRoute: (settings) {
         return MaterialPageRoute(builder: (context) => const AuthPage());
@@ -50,9 +50,9 @@ class MyApp extends StatelessWidget {
   }
 }
 
-//TODO: ideas
-// servicios
-// - abrir sobres - aca puedo aplicar animacion y una pagina solo para eso
+//TODO: - ideas
+// servicios refactor
+// - abrir sobres - con persistencia
 // - cambio de pagina dentro de un equipo
 // - ver perfil de jugador ?
 // badge - navigator con secciones dentro del equipo ?
