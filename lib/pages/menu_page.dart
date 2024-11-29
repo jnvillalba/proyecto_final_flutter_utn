@@ -65,18 +65,23 @@ class MenuPage extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: menuOptions
-                  .map((option) => Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: ElevatedButton(
-                          onPressed: option['onTap'] as VoidCallback,
-                          style: ElevatedButton.styleFrom(
-                            minimumSize: const Size(double.infinity, 48),
-                          ),
-                          child: Text(option['label']),
+              children: [
+                Image.asset(
+                  'lib/icons/LPF.png',
+                  height: 200,
+                ),
+                const SizedBox(height: 50),
+                ...menuOptions.map((option) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: ElevatedButton(
+                        onPressed: option['onTap'] as VoidCallback,
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 48),
                         ),
-                      ))
-                  .toList(),
+                        child: Text(option['label']),
+                      ),
+                    ))
+              ],
             ),
           ),
         ),

@@ -114,6 +114,11 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset(
+                'lib/icons/LPF.png',
+                height: 200,
+              ),
+              const SizedBox(height: 20),
               CustomTextfield(
                 hintText: 'User',
                 obscureText: false,
@@ -125,29 +130,6 @@ class _LoginPageState extends State<LoginPage> {
                 controller: passwordController,
               ),
               CustomBtn(text: 'Login', onTap: _signIn),
-              const Padding(
-                padding: EdgeInsets.all(5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Forgot your login details? ',
-                      style: TextStyle(color: Colors.white, fontSize: 12),
-                    ),
-                    Text(
-                      'Get help logging in.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
               const TextDivider(
                 text: 'OR',
                 dividerColor: Colors.white,

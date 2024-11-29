@@ -55,12 +55,12 @@ class MyApp extends StatelessWidget {
 //TODO: - ideas
 // servicios refactor
 // - cambio de pagina dentro de un equipo
-// descartar figuritas detele al tener apreto en el bttom
-//Estilo menu
-//estilo stickers
+// descartar figuritas delete al tener apreto en el bttom
+// ver dragger position
 //revisar login
+// clean code
 
-//2
+//V2
 // - ver perfil de jugador ?
 // badge - navigator con secciones dentro del equipo ?
 // Repetidas- descartar repetidas (delete crud)
