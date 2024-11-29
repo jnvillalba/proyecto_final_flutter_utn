@@ -5,6 +5,7 @@ import 'package:proyecto_final_facil/pages/album_page.dart';
 import 'package:proyecto_final_facil/pages/auth_page.dart';
 import 'package:proyecto_final_facil/pages/menu_page.dart';
 import 'package:proyecto_final_facil/pages/open_package_page.dart';
+import 'package:proyecto_final_facil/pages/opened_stickers_page.dart';
 import 'package:proyecto_final_facil/pages/team_detail_page.dart';
 
 Future main() async {
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         '/menu': (context) => const MenuPage(),
         '/home': (context) => const AlbumPage(),
         '/open': (context) => const OpenPackagePage(),
+        '/openedStickers': (context) => const OpenedStickersPage(),
       },
       onGenerateRoute: (settings) {
         return MaterialPageRoute(builder: (context) => const AuthPage());
@@ -52,10 +54,13 @@ class MyApp extends StatelessWidget {
 
 //TODO: - ideas
 // servicios refactor
-// - abrir sobres - con persistencia
 // - cambio de pagina dentro de un equipo
+// descartar figuritas detele al tener apreto en el bttom
+//Estilo menu
+//estilo stickers
+//revisar login
+
+//2
 // - ver perfil de jugador ?
 // badge - navigator con secciones dentro del equipo ?
 // Repetidas- descartar repetidas (delete crud)
-//Estilo menu
-//estilo stickers

@@ -160,7 +160,6 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   SquareBtn(
                     onTap: _signInGoogle,
-                    //onTap: () => createTeama(),
                     imagePath: 'lib/icons/google.png',
                     height: 50,
                   ),

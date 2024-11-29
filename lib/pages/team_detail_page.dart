@@ -54,6 +54,10 @@ class TeamDetailPageState extends State<TeamDetailPage> {
   }
 
   void _showStickers(BuildContext context) {
+    setState(() {
+      _isDragging = false;
+      _draggedPlayer = null;
+    });
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -150,10 +154,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
 
   void _updatePlayerCollection(Player droppedPlayer) async {
     try {
-      await collectSticker(
-        userId: getCurrentUserId()!,
-        playerId: droppedPlayer.id!,
-      );
+      await collectSticker(getCurrentUserId()!, droppedPlayer.id!);
 
       await _loadTeamData();
 

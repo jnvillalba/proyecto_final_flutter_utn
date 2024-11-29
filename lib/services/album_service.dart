@@ -76,12 +76,9 @@ void _markPlayersAsCollected(List<Player?> players) {
   }
 }
 
-Future<void> collectSticker({
-  required String userId,
-  required String playerId,
-}) async {
+Future<void> collectSticker(String userId, String playerId) async {
   try {
-    final albumRef = FirebaseFirestore.instance.collection('albums');
+    final albumRef = db.collection('albums');
 
     final querySnapshot =
         await albumRef.where('userId', isEqualTo: userId).get();
@@ -104,6 +101,38 @@ Future<void> collectSticker({
         'collectedIds': collectedIds,
       });
       print('El jugador $playerId agregado al album del usuario $userId');
+    }
+  } catch (e) {
+    print('Error al actualizar el álbum: $e');
+    rethrow;
+  }
+}
+
+Future<void> addStickerToAlbum(String playerId) async {
+  try {
+    final userId = getCurrentUserId();
+    final albumRef = db.collection('albums');
+
+    final querySnapshot =
+        await albumRef.where('userId', isEqualTo: userId).get();
+
+    if (querySnapshot.docs.isEmpty) {
+      throw Exception('No se encontró un álbum para el usuario $userId');
+    }
+    final doc = querySnapshot.docs.first;
+
+    final data = doc.data();
+    final stickersIds = List<String>.from(data['stickersIds'] ?? []);
+
+    if (!stickersIds.contains(playerId)) {
+      stickersIds.add(playerId);
+
+      await albumRef.doc(doc.id).update({
+        'stickersIds': stickersIds,
+      });
+      print('El jugador $playerId agregado al álbum del usuario $userId');
+    } else {
+      print('El jugador $playerId ya está en la lista de stickers.');
     }
   } catch (e) {
     print('Error al actualizar el álbum: $e');

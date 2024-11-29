@@ -52,7 +52,6 @@ class ShakeWidgetState extends AnimationControllerState<ShakeWidget> {
     super.dispose();
   }
 
-  // This method listens for the animation's completion
   void _updateStatus(AnimationStatus status) {
     if (status == AnimationStatus.completed) {
       widget.onShakeComplete();
