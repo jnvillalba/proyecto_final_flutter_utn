@@ -16,11 +16,14 @@ class AuthPage extends StatelessWidget {
         }
 
         if (snapshot.hasError) {
-          //return login page o error ?
+          //TODO pagina error
           return Center(child: Text('Algo salió mal: ${snapshot.error}'));
         }
 
         if (snapshot.hasData) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            Navigator.of(context).pushReplacementNamed('/menu');
+          });
           return const MenuPage();
         } else {
           return const LoginPage();

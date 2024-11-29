@@ -34,15 +34,14 @@ class _LoginPageState extends State<LoginPage> {
     _showLoadingDialog();
 
     try {
-      AuthService().signInWithMail(email, password);
-
+      await AuthService().signInWithMail(email, password);
       _navigateToHome();
     } on FirebaseAuthException catch (e) {
+      _dismissLoadingDialog();
       _handleAuthException(e);
     } catch (e) {
-      _showErrorDialog('Ocurrió un error.');
-    } finally {
       _dismissLoadingDialog();
+      _showErrorDialog('Ocurrió un error inesperado.');
     }
   }
 
@@ -64,42 +63,50 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _handleAuthException(FirebaseAuthException e) {
-    final String message = AuthService().getErrorMessageMail(e);
+    String message;
+    try {
+      message = AuthService().getErrorMessageMail(e);
+    } catch (e) {
+      message = 'Ocurrió un error.';
+    }
     _showErrorDialog(message);
   }
 
   void _showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('Error'),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
+    if (mounted) {
+      showDialog(
+        context: Navigator.of(context).overlay!.context,
+        builder: (_) => AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   void _signInGoogle() async {
     _showLoadingDialog();
+
     try {
-      AuthService().signInWithGoogle();
+      await AuthService().signInWithGoogle();
+
       _navigateToHome();
     } catch (e) {
-      _showErrorDialog('Ocurrió un error.');
-    } finally {
       _dismissLoadingDialog();
+      _showErrorDialog('Ocurrió un error.');
     }
   }
 
   void _navigateToHome() {
     if (mounted) {
-      Navigator.of(context, rootNavigator: true).pop();
-      Navigator.of(context).pushReplacementNamed('/home');
+      _dismissLoadingDialog();
+      Navigator.of(context).pushReplacementNamed('/menu');
     }
   }
 
@@ -110,44 +117,67 @@ class _LoginPageState extends State<LoginPage> {
         title: const Text('ÁlbUTN Login'),
       ),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'lib/icons/LPF.png',
-                height: 200,
-              ),
-              const SizedBox(height: 20),
-              CustomTextfield(
-                hintText: 'User',
-                obscureText: false,
-                controller: userNameController,
-              ),
-              CustomTextfield(
-                hintText: 'Password',
-                obscureText: true,
-                controller: passwordController,
-              ),
-              CustomBtn(text: 'Login', onTap: _signIn),
-              const TextDivider(
-                text: 'OR',
-                dividerColor: Colors.white,
-                textColor: Colors.white,
-                thickness: 1.0,
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SquareBtn(
-                    onTap: _signInGoogle,
-                    imagePath: 'lib/icons/google.png',
-                    height: 50,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 200),
+                    child: Image.asset(
+                      'lib/icons/LPF.png',
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(height: 20),
+                // Campo de Usuario
+                CustomTextfield(
+                  hintText: 'User',
+                  obscureText: false,
+                  controller: userNameController,
+                ),
+                const SizedBox(height: 10),
+
+                CustomTextfield(
+                  hintText: 'Password',
+                  obscureText: true,
+                  controller: passwordController,
+                ),
+                const SizedBox(height: 20),
+
+                CustomBtn(
+                  text: 'Login',
+                  onTap: _signIn,
+                ),
+                const SizedBox(height: 20),
+
+                const TextDivider(
+                  text: 'OR',
+                  dividerColor: Colors.white,
+                  textColor: Colors.white,
+                  thickness: 1.0,
+                ),
+                const SizedBox(height: 20),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: SquareBtn(
+                        onTap: _signInGoogle,
+                        imagePath: 'lib/icons/google.png',
+                        height: 50,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

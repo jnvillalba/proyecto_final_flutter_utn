@@ -54,6 +54,7 @@ class AuthService {
   }
 
   String getErrorMessageMail(FirebaseAuthException e) {
+    print("buscar :$e");
     final Map<String, String> errorMessages = {
       'invalid-email': 'El formato del correo electrónico es inválido.',
       'user-not-found': 'No se encontró una cuenta con este correo.',
