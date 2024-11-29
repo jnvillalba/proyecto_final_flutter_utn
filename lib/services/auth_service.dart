@@ -61,6 +61,8 @@ class AuthService {
       'wrong-password': 'La contraseña es incorrecta.',
       'too-many-requests':
           'Demasiados intentos fallidos. Intenta nuevamente más tarde.',
+      'user-disabled': 'La cuenta ha sido deshabilitada.',
+      'invalid-credential': 'Credenciales inválidas.',
     };
 
     final String message = errorMessages[e.code] ?? 'Error desconocido.';
