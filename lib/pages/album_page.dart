@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/team_card.dart';
 import 'package:proyecto_final_facil/models/team.dart';
+import 'package:proyecto_final_facil/services/album_service.dart';
 import 'package:proyecto_final_facil/services/store_services.dart';
 
 class AlbumPage extends StatefulWidget {
@@ -46,8 +47,15 @@ class _AlbumPageState extends State<AlbumPage> {
       itemCount: teams.length,
       itemBuilder: (context, index) {
         final team = teams[index];
-        return TeamCard(team: team);
+        return TeamCard(team: team, onDelete: () => _onDelete(team.id!));
       },
     );
+  }
+
+  void _onDelete(String teamId) {
+    deleteTeam(teamId);
+    // setState(() {
+    //   teams = teams.where((team) => team.id != teamId).toList();
+    // });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/empty_sticker.dart';
 import 'package:proyecto_final_facil/models/player.dart';
+import 'package:proyecto_final_facil/services/album_service.dart';
 
 class DraggableSticker extends StatelessWidget {
   final Player player;
@@ -36,14 +37,20 @@ class DraggableSticker extends StatelessWidget {
           ),
         ),
         child: SizedBox(
-          height: 150,
-          width: 125,
-          child: EmptySticker(player: player),
-        ),
+            height: 150,
+            width: 125,
+            child: EmptySticker(
+              player: player,
+              onDelete: () {},
+            )),
         onDragStarted: () => onDragStarted(player),
         onDragUpdate: (details) => onDragUpdate(details.globalPosition),
         onDragEnd: (_) => onDragEnd(),
       ),
     );
+  }
+
+  void _onDelete() {
+    removeStickerFromAlbum(player.id!);
   }
 }

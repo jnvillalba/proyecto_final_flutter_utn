@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
 // - cambio de pagina dentro de un equipo
 // descartar figuritas delete al tener apreto en el bttom
 // ver dragger position
-//revisar login
+//revisar login google
 // clean code
 
 //V2

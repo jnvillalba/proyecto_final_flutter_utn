@@ -139,3 +139,56 @@ Future<void> addStickerToAlbum(String playerId) async {
     rethrow;
   }
 }
+
+Future<void> removeStickerFromAlbum(String playerId) async {
+  try {
+    final userId = getCurrentUserId();
+    final albumRef = db.collection('albums');
+
+    final querySnapshot =
+        await albumRef.where('userId', isEqualTo: userId).get();
+
+    if (querySnapshot.docs.isEmpty) {
+      throw Exception('No se encontró un álbum para el usuario $userId');
+    }
+    final doc = querySnapshot.docs.first;
+
+    final data = doc.data();
+    final stickersIds = List<String>.from(data['stickersIds'] ?? []);
+
+    if (stickersIds.contains(playerId)) {
+      stickersIds.remove(playerId);
+
+      await albumRef.doc(doc.id).update({
+        'stickersIds': stickersIds,
+      });
+
+      print(
+          'El jugador $playerId ha sido eliminado del álbum del usuario $userId');
+    } else {
+      print('El jugador $playerId no está en la lista de stickers.');
+    }
+  } catch (e) {
+    print('Error al eliminar el jugador del álbum: $e');
+    rethrow;
+  }
+}
+
+Future<void> deleteTeam(String teamId) async {
+  try {
+    final teamRef = db.collection('teams').doc(teamId);
+
+    // Verificar si el documento existe
+    final docSnapshot = await teamRef.get();
+    if (!docSnapshot.exists) {
+      throw Exception('El equipo con ID $teamId no existe.');
+    }
+
+    // Eliminar el documento
+    await teamRef.delete();
+    print('El equipo con ID $teamId ha sido eliminado.');
+  } catch (e) {
+    print('Error al eliminar el equipo: $e');
+    rethrow;
+  }
+}
