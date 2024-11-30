@@ -54,7 +54,6 @@ class MyApp extends StatelessWidget {
 
 //TODO: - ideas
 // - cambio de pagina dentro de un equipo
-// ver dragger position
 //revisar login google
 
 //V2
