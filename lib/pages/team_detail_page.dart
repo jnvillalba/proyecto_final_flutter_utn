@@ -18,7 +18,7 @@ class TeamDetailPage extends StatefulWidget {
 class TeamDetailPageState extends State<TeamDetailPage> {
   Team? team;
 
-  Offset _dragPosition = const Offset(0, 0);
+  Offset _dragPosition = Offset.zero;
   bool _isDragging = false;
   Player? _draggedPlayer;
 
@@ -93,7 +93,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
                 },
                 onDragEnd: () {
                   setState(() {
-                    _dragPosition = Offset.zero;
+                    _dragPosition = const Offset(150, 350);
                   });
                 },
               );
@@ -231,8 +231,8 @@ class TeamDetailPageState extends State<TeamDetailPage> {
           ),
           if (_isDragging && _draggedPlayer != null)
             Positioned(
-              left: _dragPosition.dx - 50,
-              top: _dragPosition.dy - 80,
+              left: _dragPosition.dx,
+              top: _dragPosition.dy,
               child: Draggable<Player>(
                 data: _draggedPlayer,
                 feedback: SizedBox(
