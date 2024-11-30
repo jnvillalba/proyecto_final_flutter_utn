@@ -12,7 +12,7 @@ class StickersModalHeader extends StatelessWidget {
       children: [
         Text(
           availableStickers > 0
-              ? 'Figuritas disponibles:'
+              ? 'Figuritas disponibles: $availableStickers'
               : 'No hay Figuritas disponibles',
           style: Theme.of(context).textTheme.titleLarge,
         ),

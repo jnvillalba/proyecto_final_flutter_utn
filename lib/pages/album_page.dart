@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/team_card.dart';
 import 'package:proyecto_final_facil/models/team.dart';
-import 'package:proyecto_final_facil/services/album_service.dart';
-import 'package:proyecto_final_facil/services/store_services.dart';
+import 'package:proyecto_final_facil/services/team_service.dart';
 
 class AlbumPage extends StatefulWidget {
   const AlbumPage({super.key});

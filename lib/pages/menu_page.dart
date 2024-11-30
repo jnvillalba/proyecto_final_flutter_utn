@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/data.dart';
 import 'package:proyecto_final_facil/models/team.dart';
 import 'package:proyecto_final_facil/services/auth_service.dart';
-import 'package:proyecto_final_facil/services/store_services.dart';
+import 'package:proyecto_final_facil/services/player_service.dart';
+import 'package:proyecto_final_facil/services/team_service.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({super.key});

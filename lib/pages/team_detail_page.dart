@@ -6,7 +6,7 @@ import 'package:proyecto_final_facil/models/player.dart';
 import 'package:proyecto_final_facil/models/team.dart';
 import 'package:proyecto_final_facil/services/album_service.dart';
 import 'package:proyecto_final_facil/services/auth_service.dart';
-import 'package:proyecto_final_facil/services/store_services.dart';
+import 'package:proyecto_final_facil/services/team_service.dart';
 
 class TeamDetailPage extends StatefulWidget {
   const TeamDetailPage({super.key});
@@ -62,7 +62,7 @@ class TeamDetailPageState extends State<TeamDetailPage> {
       context: context,
       builder: (context) {
         return FutureBuilder<List<Player>>(
-          future: getPlayersFromStickers(),
+          future: getPlayersFromAlbumStickers(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

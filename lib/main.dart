@@ -53,12 +53,9 @@ class MyApp extends StatelessWidget {
 }
 
 //TODO: - ideas
-// servicios refactor
 // - cambio de pagina dentro de un equipo
-// descartar figuritas delete al tener apreto en el bttom
 // ver dragger position
 //revisar login google
-// clean code
 
 //V2
 // - ver perfil de jugador ?

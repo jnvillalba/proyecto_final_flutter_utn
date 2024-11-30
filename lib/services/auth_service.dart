@@ -5,6 +5,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import '../models/album.dart';
 
+FirebaseAuth auth = FirebaseAuth.instance;
+
 class AuthService {
   Future<void> signInWithGoogle() async {
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
@@ -18,14 +20,12 @@ class AuthService {
       idToken: gAuth.idToken,
     );
 
-    final userCredential =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+    final userCredential = await auth.signInWithCredential(credential);
     await _createAlbumIfNotExists(userCredential.user);
   }
 
   Future<void> signInWithMail(String email, String password) async {
-    final userCredential =
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+    final userCredential = await auth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -54,7 +54,6 @@ class AuthService {
   }
 
   String getErrorMessageMail(FirebaseAuthException e) {
-    print("buscar :$e");
     final Map<String, String> errorMessages = {
       'invalid-email': 'El formato del correo electrónico es inválido.',
       'user-not-found': 'No se encontró una cuenta con este correo.',
@@ -71,7 +70,7 @@ class AuthService {
 
   void logout(BuildContext context) async {
     try {
-      await FirebaseAuth.instance.signOut();
+      await auth.signOut();
       Navigator.pushReplacementNamed(context, '/');
     } catch (e) {
       print("Error durante el logout: $e");
@@ -83,7 +82,7 @@ class AuthService {
 }
 
 String? getCurrentUserId() {
-  User? user = FirebaseAuth.instance.currentUser;
+  User? user = auth.currentUser;
   String? userId = user?.uid;
   return userId;
 }

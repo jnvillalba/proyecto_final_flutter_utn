@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:proyecto_final_facil/components/custom_elevated_btn.dart';
+import 'package:proyecto_final_facil/components/buttons/custom_elevated_btn.dart';
 import 'package:proyecto_final_facil/components/sticker.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 

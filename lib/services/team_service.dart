@@ -1,33 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:proyecto_final_facil/models/player.dart';
+import 'package:proyecto_final_facil/models/album.dart';
 import 'package:proyecto_final_facil/models/team.dart';
+import 'package:proyecto_final_facil/services/album_service.dart';
 import 'package:proyecto_final_facil/services/auth_service.dart';
-
-import '../models/album.dart';
-import 'album_service.dart';
+import 'package:proyecto_final_facil/services/player_service.dart';
 
 FirebaseFirestore db = FirebaseFirestore.instance;
-//TODO implementar excepciones y manejo de errores
-Future<void> savePlayer(Player player) async {
-  await db.collection('players').doc(player.id).set(player.toJson());
-}
+var teamsCollection = db.collection('teams');
 
 Future<void> saveTeam(Team team) async {
-  await db.collection('teams').doc(team.id).set(team.toJson());
+  await teamsCollection.doc(team.id).set(team.toJson());
 }
 
-Future<Player> getPlayer(String playerId) async {
-  final doc = await db.collection('players').doc(playerId).get();
-  final player = Player.fromJson(doc.data()!);
-  player.id = doc.id;
-  return player;
+Future<void> deleteTeam(String teamId) async {
+  try {
+    final teamRef = teamsCollection.doc(teamId);
+
+    final docSnapshot = await teamRef.get();
+    if (!docSnapshot.exists) {
+      throw Exception('El equipo con ID $teamId no existe.');
+    }
+
+    await teamRef.delete();
+  } catch (e) {
+    print('Error al eliminar el equipo: $e');
+    rethrow;
+  }
 }
 
 Future<Team> getTeam(String teamId) async {
-  if (teamId.isEmpty) {
-    throw Exception('Team ID is required');
-  }
-  final doc = await db.collection('teams').doc(teamId).get();
+  validateTeamId(teamId);
+  final doc = await teamsCollection.doc(teamId).get();
   final team = Team.fromJson(doc.data()!);
   team.id = doc.id;
   return team;
@@ -48,11 +51,15 @@ Future<Team> _populateTeamWithPlayers(Team team) async {
   }
 }
 
+void validateTeamId(String teamId) {
+  if (teamId.isEmpty) {
+    throw Exception('Team ID is required');
+  }
+}
+
 Future<Team> getTeamWithPlayers(String teamId) async {
   try {
-    if (teamId.isEmpty) {
-      throw Exception('Team ID is required');
-    }
+    validateTeamId(teamId);
     final team = await getTeam(teamId);
     return await _populateTeamWithPlayers(team);
   } catch (e) {
@@ -62,9 +69,7 @@ Future<Team> getTeamWithPlayers(String teamId) async {
 
 Future<Team> getTeamWithPlayersCollected(String teamId) async {
   try {
-    if (teamId.isEmpty) {
-      throw Exception('Team ID is required');
-    }
+    validateTeamId(teamId);
     final team = await getTeam(teamId);
     await _populateTeamWithPlayers(team);
     return await _updateTeamPlayersCollected(team);
@@ -89,8 +94,7 @@ Future<Team> _updateTeamPlayersCollected(Team team) async {
 
 Future<List<Team>> getAllTeamsWithPlayers() async {
   try {
-    final teamQuery = await db.collection('teams').orderBy('name').get();
-
+    final teamQuery = await teamsCollection.orderBy('name').get();
     return await Future.wait(
       teamQuery.docs.map((teamDoc) async {
         final team = Team.fromJson(teamDoc.data());

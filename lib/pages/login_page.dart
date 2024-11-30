@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:proyecto_final_facil/components/custom_btn.dart';
-import 'package:proyecto_final_facil/components/custom_textfield.dart';
-import 'package:proyecto_final_facil/components/square_btn.dart';
+import 'package:proyecto_final_facil/components/buttons/custom_btn.dart';
+import 'package:proyecto_final_facil/components/buttons/square_btn.dart';
+import 'package:proyecto_final_facil/components/login/custom_textfield.dart';
 import 'package:proyecto_final_facil/services/auth_service.dart';
 
 import '../components/login/text_divider.dart';
