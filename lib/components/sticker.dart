@@ -3,11 +3,11 @@ import 'package:proyecto_final_facil/components/delete_alert_dialog.dart';
 import 'package:proyecto_final_facil/models/enums/player_position.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 
-class EmptySticker extends StatelessWidget {
+class Sticker extends StatelessWidget {
   final Player player;
   final VoidCallback? onDelete;
 
-  const EmptySticker({super.key, required this.player, this.onDelete});
+  const Sticker({super.key, required this.player, this.onDelete});
 
   Color _getBackgroundColor(PlayerPosition position) {
     switch (position) {

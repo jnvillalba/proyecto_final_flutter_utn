@@ -4,7 +4,7 @@ import 'package:proyecto_final_facil/models/player.dart';
 class StickerCollected extends StatelessWidget {
   final Player player;
 
-  const StickerCollected({super.key, required this.player, isCollected});
+  const StickerCollected({super.key, required this.player});
 
   @override
   Widget build(BuildContext context) {

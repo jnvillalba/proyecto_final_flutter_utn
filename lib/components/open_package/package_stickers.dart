@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:proyecto_final_facil/components/custom_elevated_btn.dart';
-import 'package:proyecto_final_facil/components/empty_sticker.dart';
+import 'package:proyecto_final_facil/components/sticker.dart';
 import 'package:proyecto_final_facil/models/player.dart';
 
 import '../../services/album_service.dart';
@@ -141,7 +141,7 @@ class _PackageStickersState extends State<PackageStickers> {
     return SizedBox(
       width: 250,
       height: 350,
-      child: EmptySticker(player: player),
+      child: Sticker(player: player),
     );
   }
 }
