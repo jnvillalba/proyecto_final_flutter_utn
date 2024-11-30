@@ -48,6 +48,7 @@ class OpenPackageState extends State<OpenPackagePage> {
                             },
                           );
                         });
+                        showStickers = false;
                         return Container();
                       } else {
                         return ShakeWidget(

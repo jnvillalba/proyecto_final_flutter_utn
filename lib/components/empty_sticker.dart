@@ -103,7 +103,7 @@ class EmptySticker extends StatelessWidget {
                   child: ClipRRect(
                     child: Image.network(
                       player.imageUrl,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                       width: double.infinity,
                       height: 150,
                     ),
@@ -112,7 +112,7 @@ class EmptySticker extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(2.0),
                   child: FittedBox(
-                    fit: BoxFit.scaleDown,
+                    fit: BoxFit.cover,
                     child: Text(
                       player.name,
                       style: const TextStyle(

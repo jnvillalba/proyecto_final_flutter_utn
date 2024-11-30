@@ -50,7 +50,7 @@ class MenuPage extends StatelessWidget {
       {'label': 'Álbum', 'onTap': () => navigate(context, '/home')},
       {'label': 'Abrir Sobre', 'onTap': () => navigate(context, '/open')},
       {'label': 'Logout', 'onTap': () => AuthService().logout(context)},
-      // {'label': 'Create Team', 'onTap': () => createTeam()},
+      //{'label': 'Create Team', 'onTap': () => createTeam()},
       // {'label': 'Create Player', 'onTap': () => createplayers()},
     ];
 

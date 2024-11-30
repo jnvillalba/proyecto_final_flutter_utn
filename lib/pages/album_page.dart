@@ -54,8 +54,8 @@ class _AlbumPageState extends State<AlbumPage> {
 
   void _onDelete(String teamId) {
     deleteTeam(teamId);
-    // setState(() {
-    //   teams = teams.where((team) => team.id != teamId).toList();
-    // });
+    setState(() {
+      teams = teams.where((team) => team.id != teamId).toList();
+    });
   }
 }

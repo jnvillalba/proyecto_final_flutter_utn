@@ -14,9 +14,7 @@ class AuthPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
         }
-
         if (snapshot.hasError) {
-          //TODO pagina error
           return Center(child: Text('Algo salió mal: ${snapshot.error}'));
         }
 
