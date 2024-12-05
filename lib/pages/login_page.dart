@@ -75,7 +75,6 @@ class _LoginPageState extends State<LoginPage> {
   void _showErrorDialog(String message) {
     if (mounted) {
       showDialog(
-        //context
         context: Navigator.of(context).overlay!.context,
         builder: (_) => AlertDialog(
           title: const Text('Error'),
@@ -96,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       await AuthService().signInWithGoogle();
-
+      _dismissLoadingDialog();
       _navigateToHome();
     } catch (e) {
       _dismissLoadingDialog();
@@ -136,27 +135,23 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // Campo de Usuario
                 CustomTextfield(
                   hintText: 'User',
                   obscureText: false,
                   controller: userNameController,
                 ),
                 const SizedBox(height: 10),
-
                 CustomTextfield(
                   hintText: 'Password',
                   obscureText: true,
                   controller: passwordController,
                 ),
                 const SizedBox(height: 20),
-
                 CustomBtn(
                   text: 'Login',
                   onTap: _signIn,
                 ),
                 const SizedBox(height: 20),
-
                 const TextDivider(
                   text: 'OR',
                   dividerColor: Colors.white,
@@ -164,7 +159,6 @@ class _LoginPageState extends State<LoginPage> {
                   thickness: 1.0,
                 ),
                 const SizedBox(height: 20),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

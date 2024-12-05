@@ -53,10 +53,4 @@ class MyApp extends StatelessWidget {
 }
 
 //TODO: - ideas
-// - cambio de pagina dentro de un equipo
 //revisar login google
-
-//V2
-// - ver perfil de jugador ?
-// badge - navigator con secciones dentro del equipo ?
-// Repetidas- descartar repetidas (delete crud)

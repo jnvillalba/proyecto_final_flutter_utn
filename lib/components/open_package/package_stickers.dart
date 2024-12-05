@@ -26,8 +26,6 @@ class _PackageStickersState extends State<PackageStickers> {
   }
 
   _cardSwipedRight(Player player) async {
-    print("Right");
-    print(player.name);
     await addStickerToAlbum(player.id!);
 
     setState(() {
@@ -66,9 +64,24 @@ class _PackageStickersState extends State<PackageStickers> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             players.isEmpty
-                ? const Text(
-                    "No quedan más stickers",
-                    style: TextStyle(fontSize: 20, color: Colors.white),
+                ? Column(
+                    children: [
+                      const Text(
+                        "No quedan más stickers",
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pushReplacementNamed('/menu');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white.withOpacity(0.2),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text('Volver al Menú'),
+                      ),
+                    ],
                   )
                 : SizedBox(
                     width: 300,
