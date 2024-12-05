@@ -154,14 +154,13 @@ class TeamDetailPageState extends State<TeamDetailPage> {
 
   void _updatePlayerCollection(Player droppedPlayer) async {
     try {
+      setState(() {
+        _draggedPlayer = null;
+        _isDragging = false;
+      });
       await collectSticker(getCurrentUserId()!, droppedPlayer.id!);
 
       await _loadTeamData();
-
-      setState(() {
-        _isDragging = false;
-        _draggedPlayer = null;
-      });
 
       _showMessage('${droppedPlayer.name} agregado a la colección', true);
     } catch (e) {
