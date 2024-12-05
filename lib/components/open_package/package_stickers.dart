@@ -26,12 +26,11 @@ class _PackageStickersState extends State<PackageStickers> {
   }
 
   _cardSwipedRight(Player player) async {
-    await addStickerToAlbum(player.id!);
-
     setState(() {
       players.remove(player);
       _showSnackBar("Sticker guardado: ${player.name}");
     });
+    await addStickerToAlbum(player.id!);
   }
 
   _cardSwipedLeft(Player player) async {
